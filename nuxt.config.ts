@@ -3,4 +3,5 @@ export default defineNuxtConfig({
   nitro: {
     serveStatic: true,
   },
+  css: ['@/assets/static/normalize.css'],
 });
