@@ -1,73 +1,40 @@
-import { ref } from 'vue';
-import { wait } from '@as/utils';
+// import { ref } from 'vue';
+// import { wait } from '@as/utils';
+import Player from './player';
+import Game from './game';
+import Dice from './dice';
 
 export default class Match {
   constructor() {
-    this._stacks = ref([]);
-    this._map = {};
-  }
-  get lastWarp() {
-    const stackLength = this._stacks.value.length;
-    return stackLength ? this._stacks.value[stackLength - 1] : null;
-  }
-  register(name, ctx) {
-    if (!name) throw Error(`warp: name of component is required.`);
+    this._matchType = ''; // enum?
+    this._matchStatus = 'wait'; // enum
+    this._currentGameSet = 1; // 1세트
+    this._scoreToWIn = 0;
 
-    this._map[name] = {
-      ctx,
-    };
-    ctx.emit('after-register');
-  }
-  unregister(name) {
-    if (this.isVisible(name)) this.hide(name);
-    delete this._map[name];
-  }
-  async show(name, args = {}) {
-    if (!(name in this._map)) throw Error(`warp: '${name}' is Unregistered name.`);
-    if (this._stacks.value.includes(name)) return;
-
-    const { delay = 0 } = args;
-    if (delay) await wait(delay);
-
-    this._pushStack(name);
-    this._map[name].ctx.emit('before-open', args);
-    this._map[name].ctx.emit('update:model-value', true);
-    document.documentElement.classList.add(`warp-${name}`.toLowerCase());
-  }
-  hide(name, options = {}) {
-    if (!(name in this._map)) throw Error(`warp: '${name}' is Unregistered name.`);
-    if (!this._stacks.value.includes(name)) return;
-
-    const { intended = true } = options;
-    let evt;
-    evt = new CustomEvent('warp-hide', { cancelable: true, detail: { intended } });
-    this._map[name].ctx.emit('before-close', evt);
-    if (!evt.defaultPrevented) {
-      this._removeStack(name);
-      this._map[name].ctx.emit('update:model-value', false);
-      document.documentElement.classList.remove(`warp-${name}`.toLowerCase());
-    }
-  }
-  toggle(name) {
-    if (this.isVisible(name)) this.hide(name);
-    else this.show(name);
-  }
-  isActive() {
-    return !!this._stacks.value.length;
-  }
-  isVisible(name) {
-    return this._stacks.value.includes(name);
-  }
-  hideAll() {
-    while (this._stacks.value.length) {
-      this.hide(this.lastWarp);
-    }
+    this._player1 = null;
+    this._player2 = null;
+    this._game = null;
+    this._dices = [];
   }
 
-  _pushStack(name) {
-    this._stacks.value.push(name);
+  get matchScore() {
+    return [this._player1.score, this._player2.score]
   }
-  _removeStack(name) {
-    this._stacks.value = this._stacks.value.filter((e) => e !== name);
+
+  startMatch() {
+    // name, type 받아서 시작 (match 세팅) -> 인터페이스
   }
+  initializeMatch() {
+    // matchType, winnerScore, game 세팅
+    // 정보로부터 match 세팅
+  }
+
+  initializeGame()  //  games 세팅
+  initializePlayers() // player1, player2 세팅
+  initializeDices() // dice 들
+
+  endMatch() {} // 매치 종료. 최종 결과 반환..?
+
+// loadMatch: 이전 로컬스토리지 저장된 데이터로 매치 전체 복구
+// saveMatch: Game, Player, Dices 모든 정보를 로컬스토리로 저장
 }
