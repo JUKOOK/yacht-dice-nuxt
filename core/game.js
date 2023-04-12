@@ -1,13 +1,13 @@
 // import { ref } from 'vue';
 // import { wait } from '@as/utils';
-import { sumArray } from 'utils';
+import { sumArray } from '~/utils';
 
 const POINT_BOARD = {
   mission: {
     aces: null,
     dual: null,
     triple: null,
-    quadri: null,
+    quadruple: null,
     penta: null,
     hexa: null,
   },
