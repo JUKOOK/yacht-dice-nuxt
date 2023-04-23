@@ -12,6 +12,7 @@ html {
   line-height: 1.15; /* 1 */
   -webkit-text-size-adjust: 100%; /* 2 */
   font-size: 62.5%;
+  box-sizing: border-box;
 }
 
 /* Sections
@@ -53,7 +54,7 @@ h1 {
    */
 
 hr {
-  box-sizing: content-box; /* 1 */
+  box-sizing: border-box;; /* 1 */
   height: 0; /* 1 */
   overflow: visible; /* 2 */
 }
@@ -164,6 +165,7 @@ input,
 optgroup,
 select,
 textarea {
+  box-sizing: border-box;
   font-family: inherit; /* 1 */
   font-size: 100%; /* 1 */
   line-height: 1.15; /* 1 */

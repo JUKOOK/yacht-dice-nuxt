@@ -12,10 +12,10 @@ const eyeEnum = Object.freeze({
 });
 
 export default class Dice {
-  constructor(eye = eyeEnum.Blank, isFixed = false, idx) {
+  constructor({ eye = eyeEnum.Blank, isFixed = false, idx } = {}) {
     this._eye = eye; // 눈
     this._isFixed = isFixed;
-    this._index = idx;
+    this._index = idx; // 1, 2, 3, 4, 5
   }
   get diceEye() {
     return this._eye;

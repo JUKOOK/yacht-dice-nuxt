@@ -1,30 +1,56 @@
 <template>
   <div class="yacht-dice">
     <PointBoard />
-    <DiceContainer />
+    <!-- <DiceContainer /> -->
+
     <ModalsContainer />
     <button class="btn-guide clickable-layer" @click="openGuideModal">
-      <CircleQuestionIcon width="32" height="32" />
+      <CircleQuestionIcon :width="32" :height="32" />
     </button>
   </div>
 </template>
 
 <script setup>
+import { reactive } from 'vue';
 import { ModalsContainer, useModal } from 'vue-final-modal';
+import Match from '~/core/match';
 
 import PointBoard from '~/components/PointBoard.vue';
-import DiceContainer from '~/components/DiceContainer.vue';
+// import DiceContainer from '~/components/DiceContainer.vue';
 import RuleGuideModal from '~/components/RuleGuideModal.vue';
+import MatchMakerModal from '~/components/MatchMakerModal.vue';
+
 import CircleQuestionIcon from './components/icons/CircleQuestionIcon.vue';
 
-const { open: openGuideModal, close } = useModal({
+const match = reactive(new Match());
+
+const { open: openGuideModal, close: closeGuideModal } = useModal({
   component: RuleGuideModal,
   attrs: {
     onConfirm() {
-      close();
+      closeGuideModal();
     },
   },
 });
+
+const { open: openMatchMakerModal, close: closeMatchMakerModal } = useModal({
+  component: MatchMakerModal,
+  attrs: {
+    clickToClose: false,
+    escToClose: false,
+    onConfirm(args) {
+      createMatch(args);
+      closeMatchMakerModal();
+    },
+  },
+});
+
+openMatchMakerModal();
+
+function createMatch(args) {
+  match.startMatch(args);
+  // console.log(match);
+}
 </script>
 
 <style lang="scss" scoped>

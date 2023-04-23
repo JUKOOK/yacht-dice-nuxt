@@ -2,7 +2,7 @@
 // import { wait } from '@as/utils';
 
 export default class Player {
-  constructor(name, score) {
+  constructor({ name, score } = {}) {
     this._name = name;
     this._score = score;
   }
