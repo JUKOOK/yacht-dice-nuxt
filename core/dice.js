@@ -1,6 +1,3 @@
-// import { ref } from 'vue';
-// import { wait } from '@as/utils';
-
 const eyeEnum = Object.freeze({
   Blank: 0,
   One: 1,

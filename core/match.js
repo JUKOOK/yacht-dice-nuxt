@@ -8,6 +8,25 @@ const WIN_SCORE_MAP = {
   '3of2': 2,
   '5of3': 3,
 };
+const POINT_BOARD = {
+  mission: {
+    aces: null,
+    dual: null,
+    triple: null,
+    quadruple: null,
+    penta: null,
+    hexa: null,
+  },
+  combination: {
+    choice: null,
+    fourKind: null,
+    fullHouse: null,
+    smallStr: null,
+    largeStr: null,
+    yacht: null,
+  },
+};
+
 export default class Match {
   constructor() {
     this._matchType = ''; // 'single', '3of2', '5of3'
@@ -26,9 +45,25 @@ export default class Match {
   get matchScore() {
     return [this._player1.score, this._player2.score];
   }
-  get playerTurn() {
-    return this._game.playerTurn;
+  get player1Name() {
+    return this._player1?.name || '플레이어 1';
   }
+  get player2Name() {
+    return this._player2?.name || '플레이어 2';
+  }
+  get p1PointBoard() {
+    return this._game?.p1PointBoard || { ...POINT_BOARD };
+  }
+  get p2PointBoard() {
+    return this._game?.p2PointBoard || { ...POINT_BOARD };
+  }
+  get currentTurn() {
+    return this._game?.currentTurn || 'p1';
+  }
+
+  // get playerTurn() {
+  //   return this._game.playerTurn;
+  // }
 
   startMatch({ p1Name, p2Name, matchType = 'single' } = {}) {
     this.initializeMatch(matchType);
@@ -40,7 +75,7 @@ export default class Match {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
     this._currentGameSet = 1;
-    this._game = new Game();
+    this._game = new Game({ p1Board: POINT_BOARD, p2Board: POINT_BOARD });
   }
   initializePlayers(p1Name, p2Name) {
     this._player1 = new Player({ name: p1Name, score: 0 });

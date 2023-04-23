@@ -1,34 +1,14 @@
-// import { ref } from 'vue';
-// import { wait } from '@as/utils';
 import { sumArray } from '~/utils';
 
-const POINT_BOARD = {
-  mission: {
-    aces: null,
-    dual: null,
-    triple: null,
-    quadruple: null,
-    penta: null,
-    hexa: null,
-  },
-  combination: {
-    choice: null,
-    fourKind: null,
-    fullHouse: null,
-    smallStr: null,
-    largeStr: null,
-    yacht: null,
-  },
-};
 const MISSION_SUCCESS_THRESHOLD = 63;
 const MISSION_SUCCESS_POINT = 35;
 const TOTAL_TURN = 12; // 1 ~ 12
 
 export default class Game {
-  constructor() {
-    this._p1PointBoard = structuredClone(POINT_BOARD);
-    this._p2PointBoard = structuredClone(POINT_BOARD);
-    this._currentTurn = 'p1'; // 'p1' or 'p2'
+  constructor({ p1Board, p2Board, turn = 'p1' } = {}) {
+    this._p1PointBoard = structuredClone(p1Board);
+    this._p2PointBoard = structuredClone(p2Board);
+    this._currentTurn = turn; // 'p1' or 'p2'
   }
 
   get p1PointBoard() {
@@ -37,7 +17,7 @@ export default class Game {
   get p2PointBoard() {
     return this._p2PointBoard;
   }
-  get playerTurn() {
+  get currentTurn() {
     return this._currentTurn;
   }
 

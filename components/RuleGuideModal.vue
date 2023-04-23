@@ -15,7 +15,7 @@
               <th class="explain">설명</th>
               <th class="score">점수 계산</th>
             </tr>
-            <tr class="item-row" v-for="rule in MISSION_RULES" :key="rule.key">
+            <tr class="item-row" v-for="rule in MISSION_LIST" :key="rule.key">
               <td class="label">{{ rule.label }}</td>
               <td class="explain">{{ rule.explain }}</td>
               <td class="score">{{ rule.score }}</td>
@@ -25,7 +25,7 @@
               <th class="explain">설명</th>
               <th class="score">점수 계산</th>
             </tr>
-            <tr class="item-row" v-for="rule in COMBINATION_RULES" :key="rule.key">
+            <tr class="item-row" v-for="rule in COMBINATION_LIST" :key="rule.key">
               <td class="label">{{ rule.label }}</td>
               <td class="explain">{{ rule.explain }}</td>
               <td class="score">{{ rule.score }}</td>
@@ -39,7 +39,7 @@
 
 <script setup>
 import { VueFinalModal } from 'vue-final-modal';
-import { MISSION_RULES, COMBINATION_RULES } from '~/constants/rule';
+import { MISSION_LIST, COMBINATION_LIST } from '~/constants';
 
 import CloseIcon from '~/components/icons/CloseIcon.vue';
 
