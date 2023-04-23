@@ -1,0 +1,30 @@
+.clickable-layer {
+  position: relative;
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background-color: unset;
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #1c1c1c;
+    border-radius: inherit;
+  }
+  &:hover::after {
+    opacity: 0.08;
+  }
+  &:active::after {
+    opacity: 0.16 !important;
+  }
+  &:disabled {
+    opacity: 0.4;
+    &::after {
+      opacity: 0 !important;
+    }
+  }
+}

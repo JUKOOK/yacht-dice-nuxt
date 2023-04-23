@@ -1,4 +1,4 @@
-export const RULES = [
+export const MISSION_RULES = [
   {
     key: 'Aces',
     label: '에이스',
@@ -35,6 +35,9 @@ export const RULES = [
     explain: '6이 나온 주사위의 총합',
     score: '최대 30점',
   },
+];
+
+export const COMBINATION_RULES = [
   {
     key: 'Choice',
     label: '초이스',
