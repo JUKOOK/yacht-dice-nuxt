@@ -1,4 +1,4 @@
-import { sumArray } from '~/utils';
+import { sumArray, isEqualArray, sortNumberAscending } from '~/utils';
 
 export const calcPoint = (category, diceEyes) => {
   switch (category) {
@@ -71,7 +71,8 @@ const getFourKindPoint = (diceEyes) => {
     eyeCountMap[eye] = (eyeCountMap[eye] || 0) + 1;
   }
   const isFourKind = Object.values(eyeCountMap).includes(4);
-  return isFourKind ? sumArray(diceEyes) : 0;
+  const isYacht = diceEyes.every((v) => v === dice[0]);
+  return isFourKind || isYacht ? sumArray(diceEyes) : 0;
 };
 const getFullHousePoint = (diceEyes) => {
   let eyeCountMap = {};
@@ -80,7 +81,8 @@ const getFullHousePoint = (diceEyes) => {
   }
   const isFullHouse =
     Object.values(eyeCountMap).includes(3) && Object.values(eyeCountMap).includes(2);
-  return isFullHouse ? sumArray(diceEyes) : 0;
+  const isYacht = diceEyes.every((v) => v === dice[0]);
+  return isFullHouse || isYacht ? sumArray(diceEyes) : 0;
 };
 const getSmallStrPoint = (diceEyes) => {
   const diceSet = new Set(diceEyes);
@@ -95,13 +97,14 @@ const getSmallStrPoint = (diceEyes) => {
   }
 };
 const getLargeStrPoint = (diceEyes) => {
-  const diceSet = new Set(diceEyes);
-  if (!diceSet.has(2) || !diceSet.has(3) || !diceSet.has(4) || !diceSet.has(5)) {
-    return 0;
-  } else {
-    const islargeStr = diceSet.has(1) || diceSet.has(6);
-    return islargeStr ? 30 : 0;
-  }
+  const LARGE_STR_COMBINATIONS = [
+    [1, 2, 3, 4, 5],
+    [2, 3, 4, 5, 6],
+  ];
+  const sortedEyes = sortNumberAscending(diceEyes);
+  if (LARGE_STR_COMBINATIONS.some((comb) => isEqualArray(sortedEyes, comb))) {
+    return 30;
+  } else return 0;
 };
 const getYachtPoint = (diceEyes) => {
   const isYacht = diceEyes.every((v) => v === dice[0]);
