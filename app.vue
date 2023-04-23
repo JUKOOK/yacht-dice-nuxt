@@ -45,7 +45,7 @@ onMounted(() =>
   createMatch({
     p1Name: '111',
     p2Name: '222',
-    matchType: 'solo',
+    matchType: 'single',
   })
 );
 // openMatchMakerModal();

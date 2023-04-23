@@ -71,7 +71,7 @@ const getFourKindPoint = (diceEyes) => {
     eyeCountMap[eye] = (eyeCountMap[eye] || 0) + 1;
   }
   const isFourKind = Object.values(eyeCountMap).includes(4);
-  const isYacht = diceEyes.every((v) => v === dice[0]);
+  const isYacht = diceEyes.every((v) => v === diceEyes[0]);
   return isFourKind || isYacht ? sumArray(diceEyes) : 0;
 };
 const getFullHousePoint = (diceEyes) => {
@@ -81,7 +81,7 @@ const getFullHousePoint = (diceEyes) => {
   }
   const isFullHouse =
     Object.values(eyeCountMap).includes(3) && Object.values(eyeCountMap).includes(2);
-  const isYacht = diceEyes.every((v) => v === dice[0]);
+  const isYacht = diceEyes.every((v) => v === diceEyes[0]);
   return isFullHouse || isYacht ? sumArray(diceEyes) : 0;
 };
 const getSmallStrPoint = (diceEyes) => {
@@ -107,6 +107,6 @@ const getLargeStrPoint = (diceEyes) => {
   } else return 0;
 };
 const getYachtPoint = (diceEyes) => {
-  const isYacht = diceEyes.every((v) => v === dice[0]);
-  return isYacht && dice[0] !== 0 ? 50 : 0;
+  const isYacht = diceEyes.every((v) => v === diceEyes[0]);
+  return isYacht ? 50 : 0;
 };

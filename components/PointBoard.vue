@@ -1,6 +1,6 @@
 <template>
   <div class="point-board">
-    <table class="point-table" :data-turn="match.currentTurn">
+    <table class="point-table" :data-turn="match.playerTurn">
       <thead>
         <tr class="score-stars">
           <th class="blank" rowspan="2"></th>
@@ -22,22 +22,30 @@
             <span class="icon" />
             <span class="label">{{ label }} </span>
           </td>
-          <td class="player-1" @click="onClick">{{ getPoint(key, 'p1') }}</td>
-          <td class="player-2" @click="onClick">{{ getPoint(key, 'p2') }}</td>
+          <td
+            class="player-1"
+            :class="{ filled: isFilled('p1', key) }"
+            @click="onClick('p1', key)"
+          >
+            {{ point('p1', key) }}
+          </td>
+          <td
+            class="player-2"
+            :class="{ filled: isFilled('p2', key) }"
+            @click="onClick('p2', key)"
+          >
+            {{ point('p2', key) }}
+          </td>
         </tr>
         <tr class="mission-sum">
           <td class="category">미션 총합</td>
-          <td class="player-1">0 / 63</td>
-          <!-- p1MissionSum -->
-          <td class="player-2">0 / 63</td>
-          <!-- p2MissionSum -->
+          <td class="player-1">{{ match.p1MissionSum }} / 63</td>
+          <td class="player-2">{{ match.p2MissionSum }} / 63</td>
         </tr>
         <tr class="mission-bonus">
           <td class="category">보너스 (+35)</td>
-          <td class="player-1">0</td>
-          <!-- p1MissionSuccess 로 0 or 35 -->
-          <td class="player-2">0</td>
-          <!-- p2MissionSuccess 로 0 or 35 -->
+          <td class="player-1">{{ match.p1MissionSuccess ? 35 : 0 }}</td>
+          <td class="player-2">{{ match.p2MissionSuccess ? 35 : 0 }}</td>
         </tr>
         <tr
           class="combination numberable"
@@ -48,115 +56,64 @@
             <span class="icon" />
             <span class="label">{{ label }} </span>
           </td>
-          <td class="player-1" @click="onClick">{{ getPoint(key, 'p1') }}</td>
-          <td class="player-2" @click="onClick">{{ getPoint(key, 'p2') }}</td>
+          <td
+            class="player-1"
+            :class="{ filled: isFilled('p1', key) }"
+            @click="onClick('p1', key)"
+          >
+            {{ point('p1', key) }}
+          </td>
+          <td
+            class="player-2"
+            :class="{ filled: isFilled('p2', key) }"
+            @click="onClick('p2', key)"
+          >
+            {{ point('p2', key) }}
+          </td>
         </tr>
         <tr class="total-point">
           <td class="category">총점</td>
-          <td class="player-1">0</td>
-          <td class="player-2">0</td>
+          <td class="player-1">{{ match.p1TotalSum }}</td>
+          <td class="player-2">{{ match.p2TotalSum }}</td>
         </tr>
-
-        <!-- <tr id="aces" class="numberable">
-          <td class="mission-aces"><span class="icon"></span>Aces</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="twos" class="numberable">
-          <td class="mission-twos"><span class="icon"></span>Twos</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="threes" class="numberable">
-          <td class="mission-threes"><span class="icon"></span>Threes</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="fours" class="numberable">
-          <td class="mission-fours"><span class="icon"></span>Fours</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="fives" class="numberable">
-          <td class="mission-fives"><span class="icon"></span>Fives</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="sixes" class=" numberable">
-          <td class="mission-sixes"><span class="icon"></span>Sixes</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="missionTotal">
-          <td class="mission-sum">미션 합</td>
-          <td>0 / 63</td>
-          <td>0 / 63</td>
-        </tr>
-        <tr id="bonus" class="">
-          <td class="mission-bonus">보너스 (+35)</td>
-          <td>0</td>
-          <td>0</td>
-        </tr>
-        <tr id="choice" class="numberable">
-          <td class="mission-combination"><span class="icon"></span>Choice</td>
-          <td>0</td>
-          <td>0</td>
-        </tr>
-        <tr id="four-of-a-kind" class="numberable">
-          <td class="mission-combination"><span class="icon"></span>4 of a Kind</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="full-house" class="numberable">
-          <td class="mission-combination"><span class="icon"></span>Full House</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="small-straight" class="numberable">
-          <td class="mission-combination"><span class="icon"></span>S. Straight</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="large-straight" class="numberable">
-          <td class="mission-combination"><span class="icon"></span>L. Straight</td>
-          <td @click="onClick">0</td>
-          <td @click="onClick">0</td>
-        </tr>
-        <tr id="yacht" class=" numberable">
-          <td class="mission-yacht"><span class="icon"></span>YACHT</td>
-          <td>0</td>
-          <td>0</td>
-        </tr>
-        <tr id="total-point" class="">
-          <td class="total-point">총점</td>
-          <td>0</td>
-          <td>0</td>
-        </tr> -->
       </tbody>
     </table>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from 'vue';
+import { inject } from 'vue';
 import { MISSION_LIST, COMBINATION_LIST } from '~/constants';
 import { calcPoint } from '~/core/point-calculator';
 
 const match = inject('match');
 
-// const currentGame = computed(() => match.currentGame);
-// const p1Name = computed(() => match.player1Name ?? '플레이어 1');
-// const p2Name = computed(() => match.player2Name ?? '플레이어 2');
-// const p1PointBoard = computed(() => match.currentGame.p1PointBoard);
-// const p2PointBoard = computed(() => match.currentGame.p2PointBoard);
-
-function getPoint(categoryKey, player) {
-  // 다이스 눈이 풀로체워지지 않았으면 모두 null 반환
-  // currentTurn이 아니면 null 반환
-  // currentTurn이면 calcPoint 돌리고 그 값을 보여줌
+function isFilled(playerTurn, category) {
+  const playerPoint = match.getPlayerPoint(playerTurn, category);
+  return typeof playerPoint === 'number';
+}
+function point(playerTurn, category) {
+  const playerPoint = match.getPlayerPoint(playerTurn, category);
+  if (typeof playerPoint === 'number') return playerPoint;
+  else return getPlaceholderPoint(playerTurn, category);
+}
+function getPlaceholderPoint(playerTurn, category) {
+  if (match.playerTurn !== playerTurn || match.hasBlank) return '';
+  else return calcPoint(category, match.eyes);
 }
 
-function onClick() {}
+function onClick(playerTurn, category) {
+  if (isFilled(playerTurn, category)) return;
+  if (match.playerTurn !== playerTurn || match.hasBlank) return;
+  else {
+    const point = calcPoint(category, match.eyes);
+    match.setPlayerPoint(playerTurn, category, point);
+    if (!match.checkEndGame()) {
+      match.toggleTurn();
+      match.resetDices();
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -173,6 +130,7 @@ function onClick() {}
 }
 
 .point-table {
+  user-select: none;
   .category {
     width: 14.4rem;
     text-align: left;
@@ -201,20 +159,6 @@ function onClick() {}
     letter-spacing: 2.5px;
   }
 }
-
-// .point-table thead tr.players {
-//   td .turn-number {
-//     line-height: 3.2rem;
-//     .word {
-//       font-size: 2.2rem;
-//       font-weight: 400;
-//       letter-spacing: 2px;
-//     }
-//     .num {
-//       font-size: 3.6rem;
-//     }
-//   }
-// }
 
 .point-table tbody tr {
   td {
@@ -288,14 +232,13 @@ function onClick() {}
 
 .point-table[data-turn='p1'] thead th.player-1.name,
 .point-table[data-turn='p2'] thead th.player-2.name {
-  color: #00a000;
   font-weight: bold;
   background-color: #fbdaa7;
 }
 
 .point-table[data-turn='p1'] tr.numberable td.player-1,
 .point-table[data-turn='p2'] tr.numberable td.player-2 {
-  color: #989696;
+  color: #878787;
   background-color: #fbdaa7;
   &:not(.filled):hover {
     cursor: pointer;
@@ -304,10 +247,12 @@ function onClick() {}
 }
 
 .point-table tr.numberable td.player-1.filled {
+  font-size: 2.4rem;
   color: #dd2626;
 }
 
 .point-table tr.numberable td.player-2.filled {
+  font-size: 2.4rem;
   color: #4363e8;
 }
 </style>

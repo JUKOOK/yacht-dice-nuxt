@@ -1,12 +1,4 @@
-const eyeEnum = Object.freeze({
-  Blank: 0,
-  One: 1,
-  Two: 2,
-  Three: 3,
-  Four: 4,
-  Five: 5,
-  Six: 6,
-});
+import { eyeEnum } from '~/constants/enum';
 
 export default class Dice {
   constructor({ eye = eyeEnum.Blank, isFixed = false, index } = {}) {
@@ -80,6 +72,10 @@ export default class Dice {
         this._eye = eyeEnum.Five;
         break;
     }
+  }
+  reset() {
+    this._eye = eyeEnum.Blank; // 눈
+    this._isFixed = false;
   }
 
   // 정보 추출

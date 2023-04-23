@@ -11,6 +11,7 @@
 
 <script setup>
 import { computed } from 'vue';
+import { eyeEnum } from '~/constants/enum';
 
 import DiceBlank from '~/assets/imgs/dice-dark-blank.png';
 import Dice1 from '~/assets/imgs/dice-dark-1.png';
@@ -34,7 +35,7 @@ const emit = defineEmits(['dice-clicked', 'dice-right-clicked']);
 
 const diceClass = computed(() => {
   const cls = ['dice', 'clickable-layer'];
-  if (props.eye === 0) cls.push('blank');
+  if (props.eye === eyeEnum.Blank) cls.push('blank');
   if (props.isFixed) cls.push('fixed');
   return cls;
 });

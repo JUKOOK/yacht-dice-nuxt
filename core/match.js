@@ -1,6 +1,7 @@
 import Player from './player';
 import Game from './game';
 import Dice from './dice';
+import { statusEnum } from '~/constants/enum';
 
 const DICE_NUM = 5;
 const WIN_SCORE_MAP = {
@@ -8,30 +9,11 @@ const WIN_SCORE_MAP = {
   '3of2': 2,
   '5of3': 3,
 };
-const POINT_BOARD = {
-  mission: {
-    aces: null,
-    dual: null,
-    triple: null,
-    quadruple: null,
-    penta: null,
-    hexa: null,
-  },
-  combination: {
-    choice: null,
-    fourKind: null,
-    fullHouse: null,
-    smallStr: null,
-    largeStr: null,
-    yacht: null,
-  },
-};
-
 export default class Match {
   constructor() {
     this._matchType = ''; // 'single', '3of2', '5of3'
-    // this._matchStatus = 'before-create'; // enum
     this._scoreToWIn = 0;
+    this._matchStatus = statusEnum.beforeStart;
     this._currentGameSet = 0; // 1세트
     this._game = null;
     this._player1 = null;
@@ -39,34 +21,52 @@ export default class Match {
     this._dices = [];
   }
 
-  // get matchInfo() {
-  //   return this;
-  // }
+  get matchStatus() {
+    return this._matchStatus;
+  }
+
   get matchScore() {
     return [this._player1.score, this._player2.score];
   }
   get player1Name() {
-    return this._player1?.name || '플레이어 1';
+    return this._player1?.name ?? '플레이어 1';
   }
   get player2Name() {
-    return this._player2?.name || '플레이어 2';
+    return this._player2?.name ?? '플레이어 2';
   }
-  get p1PointBoard() {
-    return this._game?.p1PointBoard || { ...POINT_BOARD };
+
+  get playerTurn() {
+    return this._game?.playerTurn ?? 'p1';
   }
-  get p2PointBoard() {
-    return this._game?.p2PointBoard || { ...POINT_BOARD };
+  get p1MissionSum() {
+    return this._game?.p1MissionSum ?? 0;
   }
-  get currentTurn() {
-    return this._game?.currentTurn || 'p1';
+  get p1MissionSuccess() {
+    return this._game?.p1MissionSuccess ?? false;
   }
+  get p1TotalSum() {
+    return this._game?.p1TotalSum ?? 0;
+  }
+  get p2MissionSum() {
+    return this._game?.p2MissionSum ?? 0;
+  }
+  get p2MissionSuccess() {
+    return this._game?.p2MissionSuccess ?? false;
+  }
+  get p2TotalSum() {
+    return this._game?.p2TotalSum ?? 0;
+  }
+
   get dices() {
     return this._dices;
   }
-
-  // get playerTurn() {
-  //   return this._game.playerTurn;
-  // }
+  get eyes() {
+    return this._dices.map((dice) => dice?.diceEye ?? 0);
+  }
+  get hasBlank() {
+    if (!this._dices.length) return true;
+    return this._dices.some((dice) => dice.diceEye === 0);
+  }
 
   startMatch({ p1Name, p2Name, matchType = 'single' } = {}) {
     this.initializeMatch(matchType);
@@ -77,8 +77,9 @@ export default class Match {
   initializeMatch(matchType) {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
+    this._matchStatus = statusEnum.onGoing;
     this._currentGameSet = 1;
-    this._game = new Game({ p1Board: POINT_BOARD, p2Board: POINT_BOARD });
+    this._game = new Game();
   }
   initializePlayers(p1Name, p2Name) {
     this._player1 = new Player({ name: p1Name, score: 0 });
@@ -89,6 +90,33 @@ export default class Match {
       const newDice = new Dice({ index });
       this._dices.push(newDice);
     }
+  }
+
+  getPlayerPoint(playerTurn, category) {
+    return this._game?.getPoint(playerTurn, category) ?? null;
+  }
+  setPlayerPoint(playerTurn, category, value) {
+    this._game.setPoint(playerTurn, category, value);
+  }
+  toggleTurn() {
+    this._game.toggleTurn();
+  }
+  resetDices() {
+    this._dices.forEach((dice) => dice.reset());
+  }
+
+  checkEndGame() {
+    const gameWinner = this._game?.gameWinner;
+    if (!!gameWinner) this._matchStatus = statusEnum.endGame;
+    return !!gameWinner;
+  }
+  endGame() {
+    // 새 게임:
+    // status 변경
+    //
+  }
+  checkEndMatch() {
+    // p1 과 p2 중 누군가가 _scoreToWIn 에 도달한 상태
   }
 
   endMatch() {} // 매치 종료. 최종 결과 반환..?
