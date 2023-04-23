@@ -1,12 +1,9 @@
 <template>
   <div class="yacht-dice">
     <PointBoard />
-    <DiceContainer />
+    <DiceContainer @btn-guide-clicked="openGuideModal" />
 
     <ModalsContainer />
-    <button class="btn-guide clickable-layer" @click="openGuideModal">
-      <CircleQuestionIcon :width="32" :height="32" />
-    </button>
   </div>
 </template>
 
@@ -19,8 +16,6 @@ import PointBoard from '~/components/PointBoard.vue';
 import DiceContainer from '~/components/DiceContainer.vue';
 import RuleGuideModal from '~/components/RuleGuideModal.vue';
 import MatchMakerModal from '~/components/MatchMakerModal.vue';
-
-import CircleQuestionIcon from './components/icons/CircleQuestionIcon.vue';
 
 const match = reactive(new Match());
 provide('match', match);
@@ -64,14 +59,7 @@ function createMatch(args) {
 <style lang="scss" scoped>
 .yacht-dice {
   display: flex;
-  .btn-guide {
-    width: 3.6rem;
-    height: 3.6rem;
-    padding: 2px;
-    position: fixed;
-    right: 2.4rem;
-    bottom: 2.4rem;
-    border-radius: 4px;
-  }
+  justify-content: space-evenly;
+  align-items: center;
 }
 </style>

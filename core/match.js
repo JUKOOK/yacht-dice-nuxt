@@ -60,6 +60,9 @@ export default class Match {
   get currentTurn() {
     return this._game?.currentTurn || 'p1';
   }
+  get dices() {
+    return this._dices;
+  }
 
   // get playerTurn() {
   //   return this._game.playerTurn;
@@ -82,8 +85,8 @@ export default class Match {
     this._player2 = new Player({ name: p2Name, score: 0 });
   }
   initializeDices() {
-    for (let idx = 1; idx <= DICE_NUM; idx++) {
-      const newDice = new Dice({ idx });
+    for (let index = 1; index <= DICE_NUM; index++) {
+      const newDice = new Dice({ index });
       this._dices.push(newDice);
     }
   }

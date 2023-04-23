@@ -9,13 +9,19 @@ const eyeEnum = Object.freeze({
 });
 
 export default class Dice {
-  constructor({ eye = eyeEnum.Blank, isFixed = false, idx } = {}) {
+  constructor({ eye = eyeEnum.Blank, isFixed = false, index } = {}) {
     this._eye = eye; // 눈
     this._isFixed = isFixed;
-    this._index = idx; // 1, 2, 3, 4, 5
+    this._index = index; // 1, 2, 3, 4, 5
   }
   get diceEye() {
     return this._eye;
+  }
+  get isFixed() {
+    return this._isFixed;
+  }
+  get index() {
+    return this._index;
   }
 
   toggleFixed() {
@@ -81,7 +87,7 @@ export default class Dice {
     return {
       eye: this._eye,
       isFixed: this._isFixed,
-      idx: this._index,
+      index: this._index,
     };
   }
 }
