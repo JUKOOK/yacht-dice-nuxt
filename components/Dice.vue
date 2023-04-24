@@ -35,7 +35,7 @@ const emit = defineEmits(['dice-clicked', 'dice-right-clicked']);
 
 const diceClass = computed(() => {
   const cls = ['dice', 'clickable-layer'];
-  if (props.eye === eyeEnum.Blank) cls.push('blank');
+  if (props.eye === eyeEnum.BLANK) cls.push('blank');
   if (props.isFixed) cls.push('fixed');
   return cls;
 });

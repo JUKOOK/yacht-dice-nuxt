@@ -1,16 +1,16 @@
 export const statusEnum = Object.freeze({
-  beforeStart: 'beforeStart',
-  onGoing: 'onGoing',
-  endGame: 'endGame',
-  endMatch: 'endMatch',
+  CREATE: 'beforeStart',
+  ONGOING: 'onGoing',
+  GAME_END: 'endGame',
+  MATCH_END: 'endMatch',
 });
 
 export const eyeEnum = Object.freeze({
-  Blank: 0,
-  One: 1,
-  Two: 2,
-  Three: 3,
-  Four: 4,
-  Five: 5,
-  Six: 6,
+  BLANK: 0,
+  ONE: 1,
+  TWO: 2,
+  THREE: 3,
+  FOUR: 4,
+  FIVE: 5,
+  SIX: 6,
 });

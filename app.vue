@@ -54,6 +54,12 @@ function createMatch(args) {
   match.startMatch(args);
   // console.log(match);
 }
+
+// statusEnum 변화 watch -> endGame 모달 (game 정보 띄우기 다음 누르면 checkEndMatch, 또는 resetGame 여러 매치 지표 업데이트)
+// statusEnum 변화 watch -> endMatch 모달 (match 정보 띄우기. 다음 누르면 사이트 새로고침.)
+
+// statusEnum.GAME_END
+// statusEnum.MATCH_END
 </script>
 
 <style lang="scss" scoped>

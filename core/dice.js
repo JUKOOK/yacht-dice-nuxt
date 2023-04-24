@@ -1,8 +1,8 @@
 import { eyeEnum } from '~/constants/enum';
 
 export default class Dice {
-  constructor({ eye = eyeEnum.Blank, isFixed = false, index } = {}) {
-    this._eye = eye; // 눈
+  constructor({ eye = eyeEnum.BLANK, isFixed = false, index } = {}) {
+    this._eye = eye;
     this._isFixed = isFixed;
     this._index = index; // 1, 2, 3, 4, 5
   }
@@ -25,56 +25,56 @@ export default class Dice {
       console.error(`${eye} is not a valid eye.`);
       return;
     }
-    this._eye = eyeEnum[eye];
+    this._eye = eye;
   }
   rollUpEye() {
     switch (this._eye) {
-      case eyeEnum.One:
-        this._eye = eyeEnum.Two;
+      case eyeEnum.ONE:
+        this._eye = eyeEnum.TWO;
         break;
-      case eyeEnum.Two:
-        this._eye = eyeEnum.Three;
+      case eyeEnum.TWO:
+        this._eye = eyeEnum.THREE;
         break;
-      case eyeEnum.Three:
-        this._eye = eyeEnum.Four;
+      case eyeEnum.THREE:
+        this._eye = eyeEnum.FOUR;
         break;
-      case eyeEnum.Four:
-        this._eye = eyeEnum.Five;
+      case eyeEnum.FOUR:
+        this._eye = eyeEnum.FIVE;
         break;
-      case eyeEnum.Five:
-        this._eye = eyeEnum.Six;
+      case eyeEnum.FIVE:
+        this._eye = eyeEnum.SIX;
         break;
-      case eyeEnum.Six:
-      case eyeEnum.Blank:
-        this._eye = eyeEnum.One;
+      case eyeEnum.SIX:
+      case eyeEnum.BLANK:
+        this._eye = eyeEnum.ONE;
         break;
     }
   }
   rollDownEye() {
     switch (this._eye) {
-      case eyeEnum.One:
-      case eyeEnum.Blank:
-        this._eye = eyeEnum.Six;
+      case eyeEnum.ONE:
+      case eyeEnum.BLANK:
+        this._eye = eyeEnum.SIX;
         break;
-      case eyeEnum.Two:
-        this._eye = eyeEnum.One;
+      case eyeEnum.TWO:
+        this._eye = eyeEnum.ONE;
         break;
-      case eyeEnum.Three:
-        this._eye = eyeEnum.Two;
+      case eyeEnum.THREE:
+        this._eye = eyeEnum.TWO;
         break;
-      case eyeEnum.Four:
-        this._eye = eyeEnum.Three;
+      case eyeEnum.FOUR:
+        this._eye = eyeEnum.THREE;
         break;
-      case eyeEnum.Five:
-        this._eye = eyeEnum.Four;
+      case eyeEnum.FIVE:
+        this._eye = eyeEnum.FOUR;
         break;
-      case eyeEnum.Six:
-        this._eye = eyeEnum.Five;
+      case eyeEnum.SIX:
+        this._eye = eyeEnum.FIVE;
         break;
     }
   }
   reset() {
-    this._eye = eyeEnum.Blank; // 눈
+    this._eye = eyeEnum.BLANK;
     this._isFixed = false;
   }
 

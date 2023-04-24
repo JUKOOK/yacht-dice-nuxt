@@ -13,7 +13,7 @@ export default class Match {
   constructor() {
     this._matchType = ''; // 'single', '3of2', '5of3'
     this._scoreToWIn = 0;
-    this._matchStatus = statusEnum.beforeStart;
+    this._matchStatus = statusEnum.CREATE;
     this._currentGameSet = 0; // 1세트
     this._game = null;
     this._player1 = null;
@@ -77,7 +77,7 @@ export default class Match {
   initializeMatch(matchType) {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
-    this._matchStatus = statusEnum.onGoing;
+    this._matchStatus = statusEnum.ONGOING;
     this._currentGameSet = 1;
     this._game = new Game();
   }
@@ -107,7 +107,7 @@ export default class Match {
 
   checkEndGame() {
     const gameWinner = this._game?.gameWinner;
-    if (!!gameWinner) this._matchStatus = statusEnum.endGame;
+    if (!!gameWinner) this._matchStatus = statusEnum.GAME_END;
     return !!gameWinner;
   }
   endGame() {
@@ -117,6 +117,7 @@ export default class Match {
   }
   checkEndMatch() {
     // p1 과 p2 중 누군가가 _scoreToWIn 에 도달한 상태
+    // this._matchStatus = statusEnum.MATCH_END;
   }
 
   endMatch() {} // 매치 종료. 최종 결과 반환..?
