@@ -11,7 +11,7 @@
 
 <script setup>
 import { computed } from 'vue';
-import { eyeEnum } from '~/constants/enum';
+import { eyeEnum } from '~/constants/dice';
 
 import DiceBlank from '~/assets/imgs/dice-dark-blank.png';
 import Dice1 from '~/assets/imgs/dice-dark-1.png';
@@ -60,7 +60,6 @@ function onContextMenu(e) {
   height: 7.4rem;
   background-color: #fff;
   border-radius: 1rem;
-  user-select: none;
   overflow-y: auto;
   box-sizing: border-box;
   border: 1px solid #fb1916;

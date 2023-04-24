@@ -1,6 +1,6 @@
 <template>
   <div class="yacht-dice">
-    <PointBoard />
+    <PointBoard @game-end="onGameEnd" />
     <DiceContainer @btn-guide-clicked="openGuideModal" />
 
     <ModalsContainer />
@@ -8,8 +8,10 @@
 </template>
 
 <script setup>
-import { reactive, provide, onMounted } from 'vue';
+import { reactive, provide } from 'vue';
 import { ModalsContainer, useModal } from 'vue-final-modal';
+import Swal from 'sweetalert2';
+import 'animate.css';
 import Match from '~/core/match';
 
 import PointBoard from '~/components/PointBoard.vue';
@@ -35,31 +37,71 @@ const { open: openMatchMakerModal, close: closeMatchMakerModal } = useModal({
     clickToClose: false,
     escToClose: false,
     onConfirm(args) {
-      createMatch(args);
+      match.startMatch(args);
       closeMatchMakerModal();
     },
   },
 });
 
-onMounted(() =>
-  createMatch({
-    p1Name: '111',
-    p2Name: '222',
-    matchType: 'single',
-  })
-);
-// openMatchMakerModal();
+openMatchMakerModal();
 
-function createMatch(args) {
-  match.startMatch(args);
-  // console.log(match);
+function onGameEnd() {
+  match.endGame();
+  const gameWinner = match.currentGameWinner;
+  const winnerName =
+    gameWinner === 'p1'
+      ? match.player1Name
+      : gameWinner === 'p2'
+      ? match.player2Name
+      : '';
+  const title =
+    gameWinner === 'draw'
+      ? '<h2 class="draw">무승부</h2>'
+      : `<h2 class="winner-notice"><span class="winner-name">${winnerName}</span> 승리</h2>`;
+  const text = `${match.player1Score} : ${match.player2Score}`;
+
+  Swal.fire({
+    title,
+    text,
+    showConfirmButton: !match.isMatchEnd, // 게임 종료하지 않은 상태. 순서 바꿔서 다음 판
+    showDenyButton: !match.isMatchEnd, // 게임 종료하지 않은 상태. 순서 유지하고 다음 판
+    showCancelButton: match.isMatchEnd, // 게임 종료 예정. '다음'
+    confirmButtonText: '순서 바꿔서 다음 판 진행',
+    denyButtonText: '순서 유지하고 다음 판 진행',
+    cancelButtonText: '게임 종료',
+    showClass: {
+      popup: 'animate__animated animate__bounceIn',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__fadeOutDown',
+    },
+  }).then((result) => {
+    if (result.isConfirmed) {
+      match.startNextGame({ shouldSwap: true });
+    } else if (result.isDenied) {
+      match.startNextGame({ shouldSwap: false });
+    } else if (result.isDismissed) {
+      onMatchEnd();
+    }
+  });
 }
 
-// statusEnum 변화 watch -> endGame 모달 (game 정보 띄우기 다음 누르면 checkEndMatch, 또는 resetGame 여러 매치 지표 업데이트)
-// statusEnum 변화 watch -> endMatch 모달 (match 정보 띄우기. 다음 누르면 사이트 새로고침.)
-
-// statusEnum.GAME_END
-// statusEnum.MATCH_END
+function onMatchEnd() {
+  const matchWinner = match.matchWinner;
+  const winnerName = matchWinner === 'p1' ? match.player1Name : match.player2Name;
+  Swal.fire({
+    title: `<h1>${winnerName} 승리</h1>`,
+    confirmButtonText: '게임 종료',
+    showClass: {
+      popup: 'animate__animated animate__bounceIn',
+    },
+    hideClass: {
+      popup: 'animate__animated animate__bounceOut',
+    },
+  }).then((result) => {
+    if (result.isConfirmed) match.endMatch();
+  });
+}
 </script>
 
 <style lang="scss" scoped>

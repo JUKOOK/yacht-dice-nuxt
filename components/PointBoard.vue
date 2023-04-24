@@ -4,8 +4,8 @@
       <thead>
         <tr class="score-stars">
           <th class="blank" rowspan="2"></th>
-          <th class="player-1 score">1</th>
-          <th class="player-2 score">0</th>
+          <th class="player-1 score">{{ match.player1Score }}</th>
+          <th class="player-2 score">{{ match.player2Score }}</th>
         </tr>
         <tr class="players">
           <th class="player-1 name">{{ match.player1Name }}</th>
@@ -88,6 +88,8 @@ import { calcPoint } from '~/core/point-calculator';
 
 const match = inject('match');
 
+const emit = defineEmits(['emit']);
+
 function isFilled(playerTurn, category) {
   const playerPoint = match.getPlayerPoint(playerTurn, category);
   return typeof playerPoint === 'number';
@@ -108,7 +110,8 @@ function onClick(playerTurn, category) {
   else {
     const point = calcPoint(category, match.eyes);
     match.setPlayerPoint(playerTurn, category, point);
-    if (!match.checkEndGame()) {
+    if (match.isGameEnd) emit('game-end');
+    else {
       match.toggleTurn();
       match.resetDices();
     }
@@ -130,7 +133,6 @@ function onClick(playerTurn, category) {
 }
 
 .point-table {
-  user-select: none;
   .category {
     width: 14.4rem;
     text-align: left;

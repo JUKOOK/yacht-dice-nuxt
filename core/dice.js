@@ -1,4 +1,4 @@
-import { eyeEnum } from '~/constants/enum';
+import { eyeEnum } from '~/constants/dice';
 
 export default class Dice {
   constructor({ eye = eyeEnum.BLANK, isFixed = false, index } = {}) {
@@ -74,7 +74,8 @@ export default class Dice {
     }
   }
   reset() {
-    this._eye = eyeEnum.BLANK;
+    // this._eye = eyeEnum.BLANK;
+    this._eye = eyeEnum.TWO;
     this._isFixed = false;
   }
 

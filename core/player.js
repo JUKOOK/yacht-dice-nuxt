@@ -15,7 +15,9 @@ export default class Player {
   }
   incrementScore() {
     this._score += 1;
-    return _score;
+  }
+  isMatchWinner(winToScore) {
+    return this._score >= winToScore;
   }
 
   // 정보 추출

@@ -62,7 +62,7 @@ export default class Game {
     for (let category in combined) {
       if (combined[category] !== null) count++;
     }
-    return count + 1;
+    return count;
   }
   get p1remainedTurn() {
     return TOTAL_TURN - this.p1CurrentTurn;
@@ -93,7 +93,7 @@ export default class Game {
     for (let category in combined) {
       if (combined[category] !== null) count++;
     }
-    return count + 1;
+    return count;
   }
   get p2remainedTurn() {
     return TOTAL_TURN - this.p2CurrentTurn;

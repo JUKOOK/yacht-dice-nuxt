@@ -2,17 +2,17 @@
   <VueFinalModal class="flex justify-center items-center">
     <div class="modal-contents">
       <div class="modal-header">
-        <h2 class="title">게임을 생성합니다.</h2>
+        <h2 class="title">게임을 생성합니다</h2>
       </div>
       <div class="modal-body">
         <div class="player">
           <div class="label">플레이어 1</div>
           <input
-            id="player-1-name"
             v-model="p1Name"
             type="text"
             class="player-name-input"
             spellcheck="false"
+            autocomplete="off"
             minlength="1"
             maxlength="6"
             placeholder="이름을 입력해주세요"
@@ -21,11 +21,11 @@
         <div class="player">
           <div class="label">플레이어 2</div>
           <input
-            id="player-2-name"
             v-model="p2Name"
             type="text"
             class="player-name-input"
             spellcheck="false"
+            autocomplete="off"
             minlength="1"
             maxlength="6"
             placeholder="이름을 입력해주세요"
@@ -45,7 +45,8 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn-start" @click="startMatch">Game Start</button>
+      <button type="submit" class="btn-start" @click="startMatch">게임 시작</button>
+      <!-- <button type="submit" class="btn-start" @click="startMatch">게임 불러오기</button> -->
     </div>
   </VueFinalModal>
 </template>
