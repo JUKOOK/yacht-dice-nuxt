@@ -106,8 +106,10 @@ function onMatchEnd() {
 
 <style lang="scss" scoped>
 .yacht-dice {
+  height: 100vh;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  gap: 5vw;
 }
 </style>

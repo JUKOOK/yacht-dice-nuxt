@@ -48,6 +48,7 @@ const emit = defineEmits(['confirm']);
 
 <style lang="scss" scoped>
 .modal-contents {
+  min-width: 90rem;
   padding: 3.2rem;
   position: relative;
   background-color: #fff;

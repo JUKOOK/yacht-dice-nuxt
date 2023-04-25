@@ -11,7 +11,7 @@
       />
     </div>
     <button class="btn-guide clickable-layer" @click="emit('btn-guide-clicked')">
-      <CircleQuestionIcon :width="36" :height="36" />
+      <CircleQuestionIcon :width="40" :height="40" />
     </button>
     <span class="test">{{ diceEyes }}</span>
   </div>
@@ -56,11 +56,9 @@ const emit = defineEmits(['btn-guide-clicked']);
 }
 
 .dice-container .btn-guide {
-  width: 4rem;
-  height: 4rem;
   padding: 2px;
   position: absolute;
-  top: 0;
+  top: 2px;
   right: 0;
   border-radius: 4px;
 }
