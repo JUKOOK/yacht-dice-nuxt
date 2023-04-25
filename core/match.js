@@ -18,6 +18,10 @@ export default class Match {
     this._dices = [];
   }
 
+  get scoreToWin() {
+    return this._scoreToWIn;
+  }
+
   get player1Name() {
     return this._player1?.name ?? '플레이어 1';
   }

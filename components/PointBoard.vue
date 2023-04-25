@@ -4,8 +4,18 @@
       <thead>
         <tr class="score-stars">
           <th class="blank" rowspan="2"></th>
-          <th class="player-1 score">{{ match.player1Score }}</th>
-          <th class="player-2 score">{{ match.player2Score }}</th>
+          <th class="player-1 score">
+            <StarScore
+              :winToScore="match.scoreToWin"
+              :playerScore="match.player1Score"
+            />
+          </th>
+          <th class="player-2 score">
+            <StarScore
+              :winToScore="match.scoreToWin"
+              :playerScore="match.player2Score"
+            />
+          </th>
         </tr>
         <tr class="players">
           <th class="player-1 name">{{ match.player1Name }}</th>
@@ -24,14 +34,14 @@
           </td>
           <td
             class="player-1"
-            :class="{ filled: isFilled('p1', key) }"
+            :class="{ pointed: isFilled('p1', key) }"
             @click="onClick('p1', key)"
           >
             {{ point('p1', key) }}
           </td>
           <td
             class="player-2"
-            :class="{ filled: isFilled('p2', key) }"
+            :class="{ pointed: isFilled('p2', key) }"
             @click="onClick('p2', key)"
           >
             {{ point('p2', key) }}
@@ -44,8 +54,8 @@
         </tr>
         <tr class="mission-bonus">
           <td class="category">보너스 (+35)</td>
-          <td class="player-1">{{ match.p1MissionSuccess ? 35 : 0 }}</td>
-          <td class="player-2">{{ match.p2MissionSuccess ? 35 : 0 }}</td>
+          <td class="player-1 pointed">{{ match.p1MissionSuccess ? 35 : 0 }}</td>
+          <td class="player-2 pointed">{{ match.p2MissionSuccess ? 35 : 0 }}</td>
         </tr>
         <tr
           class="combination numberable"
@@ -58,14 +68,14 @@
           </td>
           <td
             class="player-1"
-            :class="{ filled: isFilled('p1', key) }"
+            :class="{ pointed: isFilled('p1', key) }"
             @click="onClick('p1', key)"
           >
             {{ point('p1', key) }}
           </td>
           <td
             class="player-2"
-            :class="{ filled: isFilled('p2', key) }"
+            :class="{ pointed: isFilled('p2', key) }"
             @click="onClick('p2', key)"
           >
             {{ point('p2', key) }}
@@ -85,6 +95,8 @@
 import { inject } from 'vue';
 import { MISSION_LIST, COMBINATION_LIST } from '~/constants';
 import { calcPoint } from '~/core/point-calculator';
+
+import StarScore from './StarScore.vue';
 
 const match = inject('match');
 
@@ -177,7 +189,7 @@ function onClick(playerTurn, category) {
   &.mission-sum,
   &.mission-bonus,
   &.total-point {
-    background-color: #e6d4d4;
+    background-color: #ebdbdb;
     td {
       padding: 1.6rem 0;
       font-size: 2.2rem;
@@ -235,25 +247,27 @@ function onClick(playerTurn, category) {
 .point-table[data-turn='p1'] thead th.player-1.name,
 .point-table[data-turn='p2'] thead th.player-2.name {
   font-weight: bold;
-  background-color: #fbdaa7;
+  background-color: #defcbb;
 }
 
 .point-table[data-turn='p1'] tr.numberable td.player-1,
 .point-table[data-turn='p2'] tr.numberable td.player-2 {
   color: #878787;
-  background-color: #fbdaa7;
-  &:not(.filled):hover {
+  background-color: #defcbb;
+  &:not(.pointed):hover {
     cursor: pointer;
-    background-color: rgb(236, 156, 51);
+    background-color: #9cd45b;
   }
 }
 
-.point-table tr.numberable td.player-1.filled {
+.point-table tr.numberable td.player-1.pointed,
+.point-table tr.mission-bonus td.player-1.pointed {
   font-size: 2.4rem;
   color: #dd2626;
 }
 
-.point-table tr.numberable td.player-2.filled {
+.point-table tr.numberable td.player-2.pointed,
+.point-table tr.mission-bonus td.player-2.pointed {
   font-size: 2.4rem;
   color: #4363e8;
 }
