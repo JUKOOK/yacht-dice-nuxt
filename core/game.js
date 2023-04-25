@@ -132,9 +132,12 @@ export default class Game {
     }
   }
 
-  reset() {
-    this._p1PointBoard = structuredClone(POINT_BOARD);
-    this._p2PointBoard = structuredClone(POINT_BOARD);
-    this._playerTurn = 'p1';
+  // 정보 추출
+  getCurrentInfo() {
+    return {
+      p1Board: this._p1PointBoard,
+      p2Board: this._p2PointBoard,
+      playerTurn: this._playerTurn,
+    };
   }
 }

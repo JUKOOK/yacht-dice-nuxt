@@ -6,19 +6,19 @@
         v-for="dice in match.dices"
         :eye="dice.diceEye"
         :isFixed="dice.isFixed"
-        @dice-clicked="dice.rollUpEye()"
-        @dice-right-clicked="dice.toggleFixed()"
+        @dice-clicked="onDiceClick(dice)"
+        @dice-right-clicked="onDiceRightClicked(dice)"
       />
     </div>
     <button class="btn-guide clickable-layer" @click="emit('btn-guide-clicked')">
       <CircleQuestionIcon :width="40" :height="40" />
     </button>
-    <span class="test">{{ diceEyes }}</span>
   </div>
 </template>
 
 <script setup>
-import { inject, computed } from 'vue';
+import { inject } from 'vue';
+import { debounce } from 'throttle-debounce';
 
 import Dice from './Dice.vue';
 import CircleQuestionIcon from './icons/CircleQuestionIcon.vue';
@@ -26,12 +26,17 @@ import CircleQuestionIcon from './icons/CircleQuestionIcon.vue';
 import ContainerImg from '~/assets/imgs/container.png';
 
 const match = inject('match');
-
-const diceEyes = computed(() => {
-  return match.dices.map((dice) => dice.diceEye).join(' ');
-});
-
 const emit = defineEmits(['btn-guide-clicked']);
+
+const debounceSaveMatch = debounce(300, () => match.saveMatch());
+function onDiceClick(dice) {
+  dice.rollUpEye();
+  debounceSaveMatch();
+}
+function onDiceRightClicked(dice) {
+  dice.toggleFixed();
+  debounceSaveMatch();
+}
 </script>
 
 <style lang="scss" scoped>
@@ -61,15 +66,5 @@ const emit = defineEmits(['btn-guide-clicked']);
   top: 2px;
   right: 0;
   border-radius: 4px;
-}
-
-.dice-container .test {
-  position: absolute;
-  top: 70%;
-  left: calc(50% + 5px);
-  transform: translate(-50%, -50%);
-  font-size: 3rem;
-  color: #fff;
-  letter-spacing: 2px;
 }
 </style>

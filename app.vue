@@ -11,8 +11,9 @@
 import { reactive, provide } from 'vue';
 import { ModalsContainer, useModal } from 'vue-final-modal';
 import Swal from 'sweetalert2';
-import 'animate.css';
 import Match from '~/core/match';
+import { wait } from '~/utils';
+import 'animate.css';
 
 import PointBoard from '~/components/PointBoard.vue';
 import DiceContainer from '~/components/DiceContainer.vue';
@@ -36,8 +37,14 @@ const { open: openMatchMakerModal, close: closeMatchMakerModal } = useModal({
   attrs: {
     clickToClose: false,
     escToClose: false,
-    onConfirm(args) {
-      match.startMatch(args);
+    onConfirm({ type, gameInfo }) {
+      match.startMatch(gameInfo);
+      if (type === 'new-game') {
+        match.saveMatch();
+      } else {
+        if (match.isMatchEnd) alertMatchEnd();
+        else if (match.isGameEnd) alertGameEnd();
+      }
       closeMatchMakerModal();
     },
   },
@@ -47,6 +54,11 @@ openMatchMakerModal();
 
 function onGameEnd() {
   match.endGame();
+  match.saveMatch();
+  alertGameEnd();
+}
+
+function alertGameEnd() {
   const gameWinner = match.currentGameWinner;
   const winnerName =
     gameWinner === 'p1'
@@ -78,15 +90,17 @@ function onGameEnd() {
   }).then((result) => {
     if (result.isConfirmed) {
       match.startNextGame({ shouldSwap: true });
+      match.saveMatch();
     } else if (result.isDenied) {
       match.startNextGame({ shouldSwap: false });
+      match.saveMatch();
     } else if (result.isDismissed) {
-      onMatchEnd();
+      alertMatchEnd();
     }
   });
 }
 
-function onMatchEnd() {
+function alertMatchEnd() {
   const matchWinner = match.matchWinner;
   const winnerName = matchWinner === 'p1' ? match.player1Name : match.player2Name;
   Swal.fire({
@@ -98,8 +112,12 @@ function onMatchEnd() {
     hideClass: {
       popup: 'animate__animated animate__bounceOut',
     },
-  }).then((result) => {
-    if (result.isConfirmed) match.endMatch();
+  }).then(async (result) => {
+    if (result.isConfirmed) {
+      match.endMatch();
+      await wait(1000);
+      openMatchMakerModal();
+    }
   });
 }
 </script>

@@ -1,5 +1,8 @@
 <template>
-  <VueFinalModal class="flex justify-center items-center">
+  <VueFinalModal
+    class="flex justify-center items-center"
+    @opened="checkPrevGameSnapshot"
+  >
     <div class="modal-contents">
       <div class="modal-header">
         <h2 class="title">게임을 생성합니다</h2>
@@ -45,8 +48,15 @@
           </div>
         </div>
       </div>
-      <button type="submit" class="btn-start" @click="startMatch">게임 시작</button>
-      <!-- <button type="submit" class="btn-start" @click="startMatch">게임 불러오기</button> -->
+      <button type="button" class="btn-start" @click="startMatch">새 게임 시작</button>
+      <button
+        type="button"
+        class="btn-load"
+        @click="loadMatch"
+        :disabled="!prevGameSnapshot"
+      >
+        게임 불러오기
+      </button>
     </div>
   </VueFinalModal>
 </template>
@@ -73,17 +83,27 @@ const MATCH_TYPE_OPTIONS = [
 const p1Name = ref('');
 const p2Name = ref('');
 const matchType = ref('single');
+const prevGameSnapshot = ref(null);
 
 const emit = defineEmits(['confirm']);
 
+function checkPrevGameSnapshot() {
+  prevGameSnapshot.value = JSON.parse(localStorage.getItem('yacht-dice-snapshot'));
+}
 function startMatch() {
+  // TODO: 이름 없거나 같으면 다시 확인하라는 warning Swal
   if (!p1Name.value || !p2Name.value) return;
 
-  emit('confirm', {
-    p1Name: p1Name.value,
-    p2Name: p2Name.value,
+  const newGameInfo = {
     matchType: matchType.value,
-  });
+    p1Info: { name: p1Name.value },
+    p2Info: { name: p2Name.value },
+  };
+  emit('confirm', { type: 'new-game', gameInfo: newGameInfo });
+}
+function loadMatch() {
+  const loadGameInfo = JSON.parse(localStorage.getItem('yacht-dice-snapshot'));
+  emit('confirm', { type: 'load-game', gameInfo: loadGameInfo });
 }
 </script>
 
@@ -115,6 +135,7 @@ function startMatch() {
 
 .modal-body {
   width: 42rem;
+  margin-bottom: 4.8rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -174,7 +195,8 @@ function startMatch() {
   }
 }
 
-.modal-contents .btn-start {
+.modal-contents .btn-start,
+.modal-contents .btn-load {
   font-size: 3.2rem;
   color: orangered;
   border: 0;
@@ -182,7 +204,15 @@ function startMatch() {
   background-color: unset;
   cursor: pointer;
   display: block;
-  margin: 4.8rem 2px 0 auto;
+  margin: 1.2rem 2px 0 auto;
   font-weight: bold;
+  &:not(:disabled):hover {
+    text-decoration: underline;
+  }
+  &:disabled {
+    color: #999999;
+    cursor: default;
+    font-weight: normal;
+  }
 }
 </style>

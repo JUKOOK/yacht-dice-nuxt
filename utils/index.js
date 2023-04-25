@@ -12,3 +12,7 @@ export function sortNumberAscending(arr) {
     return a - b;
   });
 }
+
+export const wait = (timeToDelay) => {
+  return new Promise((resolve) => setTimeout(resolve, timeToDelay));
+};

@@ -1,5 +1,5 @@
 export default class Player {
-  constructor({ name, score } = {}) {
+  constructor({ name, score = 0 } = {}) {
     this._name = name;
     this._score = score;
   }
@@ -21,7 +21,7 @@ export default class Player {
   }
 
   // 정보 추출
-  getPlayerInfo() {
+  getCurrentInfo() {
     return {
       name: this._name,
       score: this._score,

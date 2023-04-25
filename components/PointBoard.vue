@@ -126,6 +126,7 @@ function onClick(playerTurn, category) {
     else {
       match.toggleTurn();
       match.resetDices();
+      match.saveMatch();
     }
   }
 }

@@ -80,7 +80,7 @@ export default class Dice {
   }
 
   // 정보 추출
-  getDiceInfo() {
+  getCurrentInfo() {
     return {
       eye: this._eye,
       isFixed: this._isFixed,

@@ -83,11 +83,11 @@ export default class Match {
     return !!this.matchWinner;
   }
 
-  startMatch({ p1Name, p2Name, matchType = 'single' } = {}) {
+  startMatch({ matchType, p1Info, p2Info, gameInfo, dicesInfo } = {}) {
     this.initializeMatch(matchType);
-    this.initializePlayers(p1Name, p2Name);
-    this.initializeGame();
-    this.initializeDices();
+    this.initializePlayers(p1Info, p2Info);
+    this.initializeGame(gameInfo);
+    this.initializeDices(dicesInfo);
   }
   startNextGame({ shouldSwap = false }) {
     if (shouldSwap) this.swapPlayer();
@@ -95,30 +95,29 @@ export default class Match {
     this.initializeDices();
   }
 
-  initializeMatch(matchType) {
+  initializeMatch(matchType = 'single') {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
   }
-  initializePlayers(p1Name, p2Name) {
-    this._player1 = new Player({ name: p1Name, score: 0 });
-    this._player2 = new Player({ name: p2Name, score: 0 });
+  initializePlayers(p1Info, p2Info) {
+    this._player1 = new Player({ name: p1Info?.name, score: p1Info?.score });
+    this._player2 = new Player({ name: p2Info?.name, score: p2Info?.score });
   }
-  initializeGame(playerTurn) {
-    this._game = new Game({ playerTurn });
+  initializeGame(gameInfo) {
+    this._game = new Game(gameInfo);
   }
-  initializeDices() {
+  initializeDices(dicesInfo) {
     this._dices = [];
-    for (let index = 1; index <= DICE_NUM; index++) {
-      const newDice = new Dice({ index });
+    for (let idx = 0; idx < DICE_NUM; idx++) {
+      const index = idx + 1;
+      const newDice = new Dice({ ...{ index }, ...dicesInfo?.[idx] });
       this._dices.push(newDice);
     }
   }
 
   swapPlayer() {
-    const p1Info = { ...this._player1.getPlayerInfo() };
-    const p2Info = { ...this._player2.getPlayerInfo() };
-    console.log(p1Info);
-    console.log(p2Info);
+    const p1Info = { ...this._player1.getCurrentInfo() };
+    const p2Info = { ...this._player2.getCurrentInfo() };
     this._player1 = new Player(p2Info);
     this._player2 = new Player(p1Info);
   }
@@ -140,9 +139,24 @@ export default class Match {
     else if (this.currentGameWinner === 'p2') this._player2.incrementScore();
   }
   endMatch() {
-    window.location.reload();
+    this._matchType = '';
+    this._scoreToWIn = 0;
+    this._player1 = null;
+    this._player2 = null;
+    this._game = null;
+    this._dices = [];
+    localStorage.removeItem('yacht-dice-snapshot');
   }
 
-  // loadMatch: 이전 로컬스토리지 저장된 데이터로 게임 전체 복구
-  // saveMatch: Game, Player, Dices 모든 정보를 로컬스토리로 저장
+  // Game, Player, Dices 등 게임 내 모든 정보를 로컬스토리자로 저장
+  saveMatch() {
+    const currentMatchInfo = {
+      matchType: this._matchType,
+      gameInfo: this._game.getCurrentInfo(),
+      p1Info: this._player1.getCurrentInfo(),
+      p2Info: this._player2.getCurrentInfo(),
+      dicesInfo: this._dices.map((dice) => dice.getCurrentInfo()),
+    };
+    localStorage.setItem('yacht-dice-snapshot', JSON.stringify(currentMatchInfo));
+  }
 }
