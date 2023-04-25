@@ -91,7 +91,7 @@ function checkPrevGameSnapshot() {
   prevGameSnapshot.value = JSON.parse(localStorage.getItem('yacht-dice-snapshot'));
 }
 function startMatch() {
-  // TODO: 이름 없거나 같으면 다시 확인하라는 warning Swal
+  // TODO: 이름 없거나 같으면 다시 확인하라는 warning Swal, 버튼에 disabled 처리
   if (!p1Name.value || !p2Name.value) return;
 
   const newGameInfo = {

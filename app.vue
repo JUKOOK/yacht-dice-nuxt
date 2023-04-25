@@ -59,6 +59,7 @@ function onGameEnd() {
 }
 
 function alertGameEnd() {
+  // TODO: 승, 패, 무승부 디자인
   const gameWinner = match.currentGameWinner;
   const winnerName =
     gameWinner === 'p1'
@@ -101,6 +102,7 @@ function alertGameEnd() {
 }
 
 function alertMatchEnd() {
+  // TODO: 게임 종료 디자인
   const matchWinner = match.matchWinner;
   const winnerName = matchWinner === 'p1' ? match.player1Name : match.player2Name;
   Swal.fire({

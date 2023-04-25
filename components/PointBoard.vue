@@ -52,6 +52,7 @@
           <td class="player-1">{{ match.p1MissionSum }} / 63</td>
           <td class="player-2">{{ match.p2MissionSum }} / 63</td>
         </tr>
+        <!-- TODO: 미션 성공시 애니메이션 추가 -->
         <tr class="mission-bonus">
           <td class="category">보너스 (+35)</td>
           <td class="player-1 pointed">{{ match.p1MissionSuccess ? 35 : 0 }}</td>
