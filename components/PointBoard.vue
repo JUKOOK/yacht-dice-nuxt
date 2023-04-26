@@ -49,14 +49,33 @@
         </tr>
         <tr class="mission-sum">
           <td class="category">미션 총합</td>
-          <td class="player-1">{{ match.p1MissionSum }} / 63</td>
-          <td class="player-2">{{ match.p2MissionSum }} / 63</td>
+          <td class="player-1">
+            {{ match.p1MissionSum }} <span class="weak">/ 63</span>
+          </td>
+          <td class="player-2">
+            {{ match.p2MissionSum }} <span class="weak">/ 63</span>
+          </td>
         </tr>
-        <!-- TODO: 미션 성공시 애니메이션 추가 -->
         <tr class="mission-bonus">
           <td class="category">보너스 (+35)</td>
-          <td class="player-1 pointed">{{ match.p1MissionSuccess ? 35 : 0 }}</td>
-          <td class="player-2 pointed">{{ match.p2MissionSuccess ? 35 : 0 }}</td>
+          <td class="player-1 pointed">
+            <div
+              :class="{
+                'animate__animated animate__heartBeat': match.p1MissionSuccess,
+              }"
+            >
+              {{ match.p1MissionSuccess ? 35 : 0 }}
+            </div>
+          </td>
+          <td class="player-2 pointed">
+            <div
+              :class="{
+                'animate__animated animate__heartBeat': match.p2MissionSuccess,
+              }"
+            >
+              {{ match.p2MissionSuccess ? 35 : 0 }}
+            </div>
+          </td>
         </tr>
         <tr
           class="combination numberable"
@@ -134,10 +153,6 @@ function onClick(playerTurn, category) {
 </script>
 
 <style lang="scss" scoped>
-.point-board {
-  // width: 48rem;
-}
-
 .point-table {
   width: 100%;
   border: solid 2px #333;
@@ -166,9 +181,6 @@ function onClick(playerTurn, category) {
     overflow: hidden;
     border: solid 1px #333;
   }
-  tr.score-stars {
-    // 별
-  }
   tr.players .name {
     font-size: 2.4rem;
     color: #272424;
@@ -194,10 +206,16 @@ function onClick(playerTurn, category) {
     background-color: #ebdbdb;
     td {
       padding: 1.6rem 0;
-      font-size: 2.2rem;
+      font-size: 2.3rem;
       text-align: center;
       border: solid 2px #171717;
     }
+  }
+  &.mission-sum .weak {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #5b5b5b;
+    letter-spacing: 1px;
   }
 }
 

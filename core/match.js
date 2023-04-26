@@ -148,7 +148,7 @@ export default class Match {
     localStorage.removeItem('yacht-dice-snapshot');
   }
 
-  // Game, Player, Dices 등 게임 내 모든 정보를 로컬스토리자로 저장
+  // Game, Player, Dices 등 게임 내 모든 정보를 로컬스토리지로 저장
   saveMatch() {
     const currentMatchInfo = {
       matchType: this._matchType,

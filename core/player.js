@@ -20,7 +20,7 @@ export default class Player {
     return this._score >= winToScore;
   }
 
-  // 정보 추출
+  // 백업용 정보 추출
   getCurrentInfo() {
     return {
       name: this._name,

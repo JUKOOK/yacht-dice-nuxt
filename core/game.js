@@ -132,7 +132,7 @@ export default class Game {
     }
   }
 
-  // 정보 추출
+  // 백업용 정보 추출
   getCurrentInfo() {
     return {
       p1Board: this._p1PointBoard,

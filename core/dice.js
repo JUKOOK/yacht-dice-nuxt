@@ -81,11 +81,12 @@ export default class Dice {
     }
   }
   reset() {
-    this._eye = eyeEnum.BLANK;
+    // this._eye = eyeEnum.BLANK;
+    this._eye = eyeEnum.FOUR;
     this._status = statusEnum.NONE;
   }
 
-  // 정보 추출
+  // 백업용 정보 추출
   getCurrentInfo() {
     return {
       eye: this._eye,
