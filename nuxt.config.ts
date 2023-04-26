@@ -6,6 +6,7 @@ export default defineNuxtConfig({
   css: [
     '@/assets/static/normalize.css',
     '@/assets/base.scss',
+    '@/assets/swal.scss',
     'vue-final-modal/style.css',
   ],
 });

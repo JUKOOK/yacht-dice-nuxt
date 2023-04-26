@@ -103,7 +103,7 @@ export default class Game {
     if (this.p1remainedTurn > 0 || this.p2remainedTurn > 0) return null;
     if (this.p1TotalSum > this.p2TotalSum) return 'p1';
     else if (this.p1TotalSum < this.p2TotalSum) return 'p2';
-    else return 'draw';
+    else return 'tie';
   }
 
   getPoint(playerTurn, category) {

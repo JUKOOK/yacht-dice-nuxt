@@ -68,19 +68,25 @@ export default class Match {
     return this._dices.some((dice) => dice.diceEye === 0);
   }
 
-  get currentGameWinner() {
-    return this._game?.gameWinner;
+  get currentGameWinnerName() {
+    const gameWinner = this._game?.gameWinner;
+    return gameWinner === 'p1'
+      ? this.player1Name
+      : gameWinner === 'p2'
+      ? this.player2Name
+      : '';
   }
   get isGameEnd() {
-    return !!this.currentGameWinner;
+    const gameWinner = this._game?.gameWinner;
+    return !!gameWinner;
   }
-  get matchWinner() {
-    if (this._player1.isMatchWinner(this._scoreToWIn)) return 'p1';
-    else if (this._player2.isMatchWinner(this._scoreToWIn)) return 'p2';
-    else return null;
+  get matchWinnerName() {
+    if (this._player1.isMatchWinner(this._scoreToWIn)) return this.player1Name;
+    else if (this._player2.isMatchWinner(this._scoreToWIn)) return this.player2Name;
+    else return '';
   }
   get isMatchEnd() {
-    return !!this.matchWinner;
+    return !!this.matchWinnerName;
   }
 
   startMatch({ matchType, p1Info, p2Info, gameInfo, dicesInfo } = {}) {
@@ -135,8 +141,9 @@ export default class Match {
   }
 
   endGame() {
-    if (this.currentGameWinner === 'p1') this._player1.incrementScore();
-    else if (this.currentGameWinner === 'p2') this._player2.incrementScore();
+    const gameWinner = this._game?.gameWinner;
+    if (gameWinner === 'p1') this._player1.incrementScore();
+    else if (gameWinner === 'p2') this._player2.incrementScore();
   }
   endMatch() {
     this._matchType = '';

@@ -20,6 +20,10 @@ import DiceContainer from '~/components/DiceContainer.vue';
 import RuleGuideModal from '~/components/RuleGuideModal.vue';
 import MatchMakerModal from '~/components/MatchMakerModal.vue';
 
+import WinnerAndLoser from '~/assets/imgs/winner-and-loser.png';
+import TieGame from '~/assets/imgs/tie.png';
+import WinnerTrophyImg from '~/assets/imgs/winner-golden-trophy.avif';
+
 const match = reactive(new Match());
 provide('match', match);
 
@@ -59,23 +63,20 @@ function onGameEnd() {
 }
 
 function alertGameEnd() {
-  // TODO: 승, 패, 무승부 디자인
-  const gameWinner = match.currentGameWinner;
-  const winnerName =
-    gameWinner === 'p1'
-      ? match.player1Name
-      : gameWinner === 'p2'
-      ? match.player2Name
-      : '';
-  const title =
-    gameWinner === 'draw'
-      ? '<h2 class="draw">무승부</h2>'
-      : `<h2 class="winner-notice"><span class="winner-name">${winnerName}</span> 승리</h2>`;
-  const text = `${match.player1Score} : ${match.player2Score}`;
+  const winnerName = match.currentGameWinnerName;
+  const title = winnerName === '' ? '무승부' : `${winnerName} 승리`;
+  const html =
+    winnerName === ''
+      ? `<img src="${TieGame}" width="200" height="200" />`
+      : `<img src="${WinnerAndLoser}" width="256" height="200" />`;
 
   Swal.fire({
     title,
-    text,
+    customClass: {
+      container: 'game-end-modal',
+    },
+    background: '#fff url(https://sweetalert2.github.io/images/trees.png)',
+    html,
     showConfirmButton: !match.isMatchEnd, // 게임 종료하지 않은 상태. 순서 바꿔서 다음 판
     showDenyButton: !match.isMatchEnd, // 게임 종료하지 않은 상태. 순서 유지하고 다음 판
     showCancelButton: match.isMatchEnd, // 게임 종료 예정. '다음'
@@ -102,12 +103,16 @@ function alertGameEnd() {
 }
 
 function alertMatchEnd() {
-  // TODO: 게임 종료 디자인
-  const matchWinner = match.matchWinner;
-  const winnerName = matchWinner === 'p1' ? match.player1Name : match.player2Name;
+  const winnerName = match.matchWinnerName;
   Swal.fire({
-    title: `<h1>${winnerName} 승리</h1>`,
-    confirmButtonText: '게임 종료',
+    title: `<h1>${winnerName}</h1>`,
+    confirmButtonText: '새 게임 진행',
+    imageUrl: WinnerTrophyImg,
+    customClass: {
+      container: 'match-end-modal',
+    },
+    imageWidth: 640,
+    imageHeight: 640,
     showClass: {
       popup: 'animate__animated animate__bounceIn',
     },
