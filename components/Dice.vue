@@ -1,17 +1,20 @@
 <template>
-  <button
+  <div
     :class="diceClass"
     tabindex="1"
-    @click="onClick"
+    @mouseenter="onMouseenter"
+    @mouseleave="onMouseleave"
     @contextmenu="onContextMenu($event)"
+    @click="onClick"
+    @wheel="onWheel"
   >
     <img :src="imgSrc" class="dice-img" />
-  </button>
+  </div>
 </template>
 
 <script setup>
-import { computed } from 'vue';
-import { eyeEnum } from '~/constants/dice';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
+import { throttle } from 'throttle-debounce';
 
 import DiceBlank from '~/assets/imgs/dice-dark-blank.png';
 import Dice1 from '~/assets/imgs/dice-dark-1.png';
@@ -21,36 +24,71 @@ import Dice4 from '~/assets/imgs/dice-dark-4.png';
 import Dice5 from '~/assets/imgs/dice-dark-5.png';
 import Dice6 from '~/assets/imgs/dice-dark-6.png';
 
+const IMAGE_LIST = [DiceBlank, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
+
 const props = defineProps({
-  eye: {
-    type: Number,
-    default: 0,
-  },
-  isFixed: {
-    type: Boolean,
-    default: false,
+  dice: {
+    type: [Object, null],
+    default: null,
   },
 });
-const emit = defineEmits(['dice-clicked', 'dice-right-clicked']);
+const emit = defineEmits(['dice-changed']);
 
 const diceClass = computed(() => {
   const cls = ['dice', 'clickable-layer'];
-  if (props.eye === eyeEnum.BLANK) cls.push('blank');
-  if (props.isFixed) cls.push('fixed');
+  if (props.dice.isActive) cls.push('active');
+  else if (props.dice.isFixed) cls.push('fixed');
+  else cls.push('none');
   return cls;
 });
-const imgSrc = computed(() => {
-  const diceImgList = [DiceBlank, Dice1, Dice2, Dice3, Dice4, Dice5, Dice6];
-  return diceImgList[props.eye];
+const imgSrc = computed(() => IMAGE_LIST[props.dice.diceEye]);
+
+onMounted(() => {
+  document.addEventListener('keyup', onKeyup);
+});
+onBeforeUnmount(() => {
+  document.removeEventListener('keyup', onKeyup);
 });
 
-function onClick() {
-  if (props.isFixed) return;
-  emit('dice-clicked');
+const throttleRollUp = throttle(200, () => {
+  props.dice.rollUpEye();
+  emit('dice-changed');
+});
+const throttleRollDown = throttle(200, () => {
+  props.dice.rollDownEye();
+  emit('dice-changed');
+});
+
+function onMouseenter() {
+  if (props.dice.isFixed) return;
+  if (!props.dice.isActive) props.dice.setActive(true);
+}
+function onMouseleave() {
+  if (props.dice.isFixed) return;
+  if (props.dice.isActive) props.dice.setActive(false);
 }
 function onContextMenu(e) {
   e.preventDefault();
-  emit('dice-right-clicked');
+  props.dice.setFixed(!props.dice.isFixed);
+  emit('dice-changed');
+}
+function onClick() {
+  if (!props.dice.isActive) return;
+
+  throttleRollUp();
+}
+function onWheel(e) {
+  if (!props.dice.isActive) return;
+
+  const { deltaY } = e;
+  if (deltaY > 0) throttleRollUp();
+  if (deltaY < 0) throttleRollDown();
+}
+function onKeyup(e) {
+  if (!props.dice.isActive) return;
+
+  if (['ArrowUp', 'ArrowRight'].includes(e.code)) throttleRollUp();
+  else if (['ArrowDown', 'ArrowLeft'].includes(e.code)) throttleRollDown();
 }
 </script>
 
@@ -63,11 +101,18 @@ function onContextMenu(e) {
   overflow-y: auto;
   box-sizing: border-box;
   border: 1px solid #fb1916;
+  outline: 0;
   .dice-img {
     width: 7.2rem;
     height: 7.2rem;
     display: block;
     background-size: contain;
+  }
+  &.none:hover {
+    border-color: #c4c4c4;
+  }
+  &.active {
+    border-color: #fff;
   }
   &.fixed {
     border-color: #00e1ff;
@@ -76,10 +121,6 @@ function onContextMenu(e) {
       background-color: #00e1ff;
       opacity: 0.5;
     }
-  }
-  &:not(.fixed).blank,
-  &:not(.fixed):hover {
-    border-color: #fff;
   }
 }
 </style>

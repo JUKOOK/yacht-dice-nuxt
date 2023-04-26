@@ -1,33 +1,38 @@
-import { eyeEnum } from '~/constants/dice';
+import { eyeEnum, statusEnum } from '~/constants/dice';
 
 export default class Dice {
-  constructor({ eye = eyeEnum.BLANK, isFixed = false, index } = {}) {
+  constructor({ eye = eyeEnum.BLANK, status = statusEnum.NONE, index } = {}) {
     this._eye = eye;
-    this._isFixed = isFixed;
+    this._status = status;
     this._index = index; // 1, 2, 3, 4, 5
   }
   get diceEye() {
     return this._eye;
   }
+  get isActive() {
+    return this._status === statusEnum.ACTIVE;
+  }
   get isFixed() {
-    return this._isFixed;
+    return this._status === statusEnum.FIXED;
   }
   get index() {
     return this._index;
   }
 
-  toggleFixed() {
-    this._isFixed = !this._isFixed;
+  setActive(b) {
+    this._status = b ? statusEnum.ACTIVE : statusEnum.NONE;
+  }
+  setFixed(b) {
+    this._status = b ? statusEnum.FIXED : statusEnum.NONE;
   }
   setEye(eye) {
-    const validEyes = Object.values(eyeEnum);
-    if (!validEyes.includes(eye)) {
-      console.error(`${eye} is not a valid eye.`);
-      return;
-    }
+    if (!this.isActive) return;
+
     this._eye = eye;
   }
   rollUpEye() {
+    if (!this.isActive) return;
+
     switch (this._eye) {
       case eyeEnum.ONE:
         this._eye = eyeEnum.TWO;
@@ -51,6 +56,8 @@ export default class Dice {
     }
   }
   rollDownEye() {
+    if (!this.isActive) return;
+
     switch (this._eye) {
       case eyeEnum.ONE:
       case eyeEnum.BLANK:
@@ -74,16 +81,15 @@ export default class Dice {
     }
   }
   reset() {
-    // this._eye = eyeEnum.BLANK;
-    this._eye = eyeEnum.TWO;
-    this._isFixed = false;
+    this._eye = eyeEnum.BLANK;
+    this._status = statusEnum.NONE;
   }
 
   // 정보 추출
   getCurrentInfo() {
     return {
       eye: this._eye,
-      isFixed: this._isFixed,
+      status: this._status,
       index: this._index,
     };
   }

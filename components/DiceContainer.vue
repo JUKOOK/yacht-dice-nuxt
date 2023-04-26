@@ -4,10 +4,8 @@
     <div class="dice-wrapper">
       <Dice
         v-for="dice in match.dices"
-        :eye="dice.diceEye"
-        :isFixed="dice.isFixed"
-        @dice-clicked="onDiceClick(dice)"
-        @dice-right-clicked="onDiceRightClicked(dice)"
+        :dice="dice"
+        @dice-changed="debounceSaveMatch"
       />
     </div>
     <button class="btn-guide clickable-layer" @click="emit('btn-guide-clicked')">
@@ -29,14 +27,6 @@ const match = inject('match');
 const emit = defineEmits(['btn-guide-clicked']);
 
 const debounceSaveMatch = debounce(300, () => match.saveMatch());
-function onDiceClick(dice) {
-  dice.rollUpEye();
-  debounceSaveMatch();
-}
-function onDiceRightClicked(dice) {
-  dice.toggleFixed();
-  debounceSaveMatch();
-}
 </script>
 
 <style lang="scss" scoped>

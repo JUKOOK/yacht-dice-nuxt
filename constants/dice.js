@@ -7,3 +7,9 @@ export const eyeEnum = Object.freeze({
   FIVE: 5,
   SIX: 6,
 });
+
+export const statusEnum = Object.freeze({
+  NONE: 'none',
+  ACTIVE: 'active',
+  FIXED: 'fixed',
+});
