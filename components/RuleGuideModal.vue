@@ -4,7 +4,7 @@
       <div class="modal-header">
         <h1 class="title">RULES</h1>
         <button class="btn-close clickable-layer" @click="emit('confirm')">
-          <CloseIcon />
+          <CloseIcon :width="32" :height="32" />
         </button>
       </div>
       <div class="table-area">
@@ -48,7 +48,7 @@ const emit = defineEmits(['confirm']);
 
 <style lang="scss" scoped>
 .modal-contents {
-  min-width: 90rem;
+  min-width: 96rem;
   padding: 3.2rem;
   position: relative;
   background-color: #fff;
@@ -72,8 +72,8 @@ const emit = defineEmits(['confirm']);
   .btn-close {
     padding: 2px;
     position: absolute;
-    top: 2.4rem;
-    right: 2.4rem;
+    top: 2.8rem;
+    right: 3rem;
     border-radius: 4px;
   }
 }
@@ -110,7 +110,7 @@ const emit = defineEmits(['confirm']);
   font-size: 2rem;
   font-weight: 700;
   th {
-    height: 3.2rem;
+    height: 3.6rem;
   }
   .label {
     width: 16rem;
@@ -129,7 +129,7 @@ const emit = defineEmits(['confirm']);
 .rule-table .item-row {
   font-size: 1.7rem;
   td {
-    height: 4rem;
+    height: 4.2rem;
   }
 }
 </style>

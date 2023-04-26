@@ -151,13 +151,13 @@ function loadMatch() {
   .player {
     .label {
       font-size: 1.6rem;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
       font-weight: 500;
     }
     .player-name-input {
       width: 19.2rem;
       height: 4rem;
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       line-height: 2.4rem;
       padding: 8px 1.6rem;
       margin-bottom: 2.4rem;
@@ -193,7 +193,7 @@ function loadMatch() {
         align-items: center;
         border: 1px solid #e5e5e5;
         border-radius: 4px;
-        font-size: 2rem;
+        font-size: 2.2rem;
         &.active {
           border-color: #d01411 !important;
           font-weight: bold;
@@ -205,7 +205,7 @@ function loadMatch() {
 
 .modal-contents .btn-start,
 .modal-contents .btn-load {
-  font-size: 3.2rem;
+  font-size: 3rem;
   color: orangered;
   border: 0;
   padding: 0;

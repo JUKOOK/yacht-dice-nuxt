@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap');
+
 html {
   font-size: 62.5%;
   box-sizing: border-box;
@@ -5,6 +7,10 @@ html {
   user-select: none;
   background: url(./imgs/oak-wooden-textured-background.avif) center no-repeat;
   background-size: cover;
+  font-family: 'Noto Sans KR', sans-serif;
+  * {
+    font-family: 'Noto Sans KR', sans-serif;
+  }
 }
 
 .clickable-layer {

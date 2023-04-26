@@ -163,7 +163,7 @@ function onClick(playerTurn, category) {
 
 .point-table {
   .category {
-    width: 14.4rem;
+    width: 15.6rem;
     text-align: left;
   }
   .player-1,
@@ -260,7 +260,7 @@ function onClick(playerTurn, category) {
     height: 2rem;
     left: 9px;
     background-image: url(../assets/imgs/dices-dark.png);
-    background-size: contain;
+    background-size: cover;
   }
 }
 
