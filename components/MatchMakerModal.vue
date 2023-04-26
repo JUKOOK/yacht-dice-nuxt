@@ -48,7 +48,14 @@
           </div>
         </div>
       </div>
-      <button type="button" class="btn-start" @click="startMatch">새 게임 시작</button>
+      <button
+        type="button"
+        class="btn-start"
+        @click="startMatch"
+        :disabled="startDisabled"
+      >
+        새 게임 시작
+      </button>
       <button
         type="button"
         class="btn-load"
@@ -62,7 +69,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { VueFinalModal } from 'vue-final-modal';
 
 const MATCH_TYPE_OPTIONS = [
@@ -85,15 +92,16 @@ const p2Name = ref('');
 const matchType = ref('single');
 const prevGameSnapshot = ref(null);
 
+const startDisabled = computed(
+  () => !p1Name.value || !p2Name.value || p1Name.value === p2Name.value
+);
+
 const emit = defineEmits(['confirm']);
 
 function checkPrevGameSnapshot() {
   prevGameSnapshot.value = JSON.parse(localStorage.getItem('yacht-dice-snapshot'));
 }
 function startMatch() {
-  // TODO: 이름 없거나 같으면 다시 확인하라는 warning Swal, 버튼에 disabled 처리
-  if (!p1Name.value || !p2Name.value) return;
-
   const newGameInfo = {
     matchType: matchType.value,
     p1Info: { name: p1Name.value },
