@@ -81,8 +81,7 @@ export default class Dice {
     }
   }
   reset() {
-    // this._eye = eyeEnum.BLANK;
-    this._eye = eyeEnum.FOUR;
+    this._eye = eyeEnum.BLANK;
     this._status = statusEnum.NONE;
   }
 

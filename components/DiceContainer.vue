@@ -9,7 +9,7 @@
       />
     </div>
     <button class="btn-guide clickable-layer" @click="emit('btn-guide-clicked')">
-      <CircleQuestionIcon :width="40" :height="40" />
+      <CircleQuestionIcon :width="42" :height="42" />
     </button>
   </div>
 </template>

@@ -50,11 +50,11 @@ onBeforeUnmount(() => {
   document.removeEventListener('keyup', onKeyup);
 });
 
-const throttleRollUp = throttle(200, () => {
+const throttleRollUp = throttle(250, () => {
   props.dice.rollUpEye();
   emit('dice-changed');
 });
-const throttleRollDown = throttle(200, () => {
+const throttleRollDown = throttle(250, () => {
   props.dice.rollDownEye();
   emit('dice-changed');
 });

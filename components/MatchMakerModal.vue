@@ -9,7 +9,7 @@
       </div>
       <div class="modal-body">
         <div class="player">
-          <div class="label">플레이어 1</div>
+          <div class="label">플레이어 1 (선)</div>
           <input
             v-model="p1Name"
             type="text"
@@ -22,7 +22,7 @@
           />
         </div>
         <div class="player">
-          <div class="label">플레이어 2</div>
+          <div class="label">플레이어 2 (후)</div>
           <input
             v-model="p2Name"
             type="text"

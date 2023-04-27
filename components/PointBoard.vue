@@ -91,14 +91,18 @@
             :class="{ pointed: isFilled('p1', key) }"
             @click="onClick('p1', key)"
           >
-            {{ point('p1', key) }}
+            <div :class="{ 'animate__animated animate__flip': hasYacht('p1', key) }">
+              {{ point('p1', key) }}
+            </div>
           </td>
           <td
             class="player-2"
             :class="{ pointed: isFilled('p2', key) }"
             @click="onClick('p2', key)"
           >
-            {{ point('p2', key) }}
+            <div :class="{ 'animate__animated animate__flip': hasYacht('p2', key) }">
+              {{ point('p2', key) }}
+            </div>
           </td>
         </tr>
         <tr class="total-point">
@@ -122,6 +126,12 @@ const match = inject('match');
 
 const emit = defineEmits(['emit']);
 
+function hasYacht(playerTurn, category) {
+  if (category !== 'yacht') return false;
+
+  const playerPoint = match.getPlayerPoint(playerTurn, category);
+  return !!playerPoint;
+}
 function isFilled(playerTurn, category) {
   const playerPoint = match.getPlayerPoint(playerTurn, category);
   return typeof playerPoint === 'number';
@@ -156,7 +166,7 @@ function onClick(playerTurn, category) {
 .point-table {
   width: 100%;
   border: solid 2px #333;
-  border-radius: 4px;
+  border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
 }
@@ -180,9 +190,15 @@ function onClick(playerTurn, category) {
     text-overflow: ellipsis;
     overflow: hidden;
     border: solid 1px #333;
+    &.blank {
+      border-top-left-radius: 8px;
+    }
+    &.player-2.score {
+      border-top-right-radius: 8px;
+    }
   }
   tr.players .name {
-    font-size: 2.4rem;
+    font-size: 2.3rem;
     color: #272424;
     letter-spacing: 2.5px;
   }
@@ -216,6 +232,14 @@ function onClick(playerTurn, category) {
     font-weight: 700;
     color: #5b5b5b;
     letter-spacing: 1px;
+  }
+  &.total-point {
+    td.category {
+      border-bottom-left-radius: 8px;
+    }
+    td.player-2 {
+      border-bottom-right-radius: 8px;
+    }
   }
 }
 
