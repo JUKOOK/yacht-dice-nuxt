@@ -235,7 +235,8 @@ function onClick(playerTurn, category) {
     font-weight: 400;
     text-overflow: ellipsis;
     overflow: hidden;
-    border: solid 1px #333;
+    background-color: #775946;
+    border: solid 2px #171717;
     &.blank {
       border-top-left-radius: 8px;
     }
@@ -245,7 +246,7 @@ function onClick(playerTurn, category) {
   }
   tr.players .name {
     font-size: 2.3rem;
-    color: #272424;
+    color: #fff;
     letter-spacing: 2.5px;
   }
 }
@@ -265,7 +266,8 @@ function onClick(playerTurn, category) {
   &.mission-sum,
   &.mission-bonus,
   &.total-point {
-    background-color: #ebdbdb;
+    color: #fff;
+    background-color: #775946;
     td {
       padding: 1.6rem 0;
       font-size: 2.3rem;
@@ -276,7 +278,6 @@ function onClick(playerTurn, category) {
   &.mission-sum .weak {
     font-size: 1.6rem;
     font-weight: 700;
-    color: #5b5b5b;
     letter-spacing: 1px;
   }
   &.total-point {
@@ -339,7 +340,7 @@ function onClick(playerTurn, category) {
   .player-1,
   .player-2,
   .player-3 {
-    width: 10rem;
+    width: 10.8rem;
     text-align: center;
   }
 
@@ -362,35 +363,35 @@ function onClick(playerTurn, category) {
 .point-table[data-turn='p2'] thead th.player-2.name,
 .point-table[data-turn='p3'] thead th.player-3.name {
   font-weight: bold;
-  background-color: #defcbb;
+  font-size: 2.4rem;
 }
 
 .point-table[data-turn='p1'] tr.numberable td.player-1,
 .point-table[data-turn='p2'] tr.numberable td.player-2,
 .point-table[data-turn='p3'] tr.numberable td.player-3 {
-  color: #878787;
-  background-color: #defcbb;
+  color: #775946;
+  background-color: #fff6e8;
   &:not(.pointed):hover {
     cursor: pointer;
-    background-color: #9cd45b;
+    background-color: #ffe3b9;
   }
 }
 
 .point-table tr.numberable td.player-1.pointed,
 .point-table tr.mission-bonus td.player-1.pointed {
   font-size: 2.4rem;
-  color: #dd2626;
+  color: #fa5c5c;
 }
 
 .point-table tr.numberable td.player-2.pointed,
 .point-table tr.mission-bonus td.player-2.pointed {
   font-size: 2.4rem;
-  color: #4363e8;
+  color: #6884f9;
 }
 
 .point-table tr.numberable td.player-3.pointed,
 .point-table tr.mission-bonus td.player-3.pointed {
   font-size: 2.4rem;
-  color: #23a914;
+  color: #00b447;
 }
 </style>

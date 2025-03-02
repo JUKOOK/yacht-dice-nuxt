@@ -34,7 +34,7 @@ const props = defineProps({
 
 <style lang="scss">
 .star-icon {
-  color: #f2ce00;
+  color: #ffe3b9;
   svg {
     stroke: currentColor;
     .star-icon__fill {

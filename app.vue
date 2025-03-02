@@ -135,6 +135,6 @@ function alertMatchEnd() {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5vw;
+  gap: 4vw;
 }
 </style>

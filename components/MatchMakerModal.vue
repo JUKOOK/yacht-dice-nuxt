@@ -17,7 +17,7 @@
             spellcheck="false"
             autocomplete="off"
             minlength="1"
-            maxlength="6"
+            maxlength="5"
             placeholder="이름을 입력해주세요"
           />
         </div>
@@ -30,7 +30,7 @@
             spellcheck="false"
             autocomplete="off"
             minlength="1"
-            maxlength="6"
+            maxlength="5"
             placeholder="이름을 입력해주세요"
           />
         </div>
@@ -44,7 +44,7 @@
             spellcheck="false"
             autocomplete="off"
             minlength="1"
-            maxlength="6"
+            maxlength="5"
             placeholder="이름을 입력해주세요"
           />
         </div>
