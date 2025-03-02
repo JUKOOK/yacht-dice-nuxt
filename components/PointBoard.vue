@@ -1,25 +1,38 @@
 <template>
   <div class="point-board">
-    <table class="point-table" :data-turn="match.playerTurn">
+    <table
+      class="point-table"
+      :class="{ 'three-players': match.playerCount === 3 }"
+      :data-turn="match.playerTurn"
+    >
       <thead>
         <tr class="score-stars">
           <th class="blank" rowspan="2"></th>
           <th class="player-1 score">
             <StarScore
-              :winToScore="match.scoreToWin"
-              :playerScore="match.player1Score"
+              :win-to-score="match.scoreToWin"
+              :player-score="match.player1Score"
             />
           </th>
           <th class="player-2 score">
             <StarScore
-              :winToScore="match.scoreToWin"
-              :playerScore="match.player2Score"
+              :win-to-score="match.scoreToWin"
+              :player-score="match.player2Score"
+            />
+          </th>
+          <th v-if="match.playerCount === 3" class="player-3 score">
+            <StarScore
+              :win-to-score="match.scoreToWin"
+              :player-score="match.player3Score"
             />
           </th>
         </tr>
         <tr class="players">
           <th class="player-1 name">{{ match.player1Name }}</th>
           <th class="player-2 name">{{ match.player2Name }}</th>
+          <th v-if="match.playerCount === 3" class="player-3 name">
+            {{ match.player3Name }}
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -46,6 +59,14 @@
           >
             {{ point('p2', key) }}
           </td>
+          <td
+            v-if="match.playerCount === 3"
+            class="player-3"
+            :class="{ pointed: isFilled('p3', key) }"
+            @click="onClick('p3', key)"
+          >
+            {{ point('p3', key) }}
+          </td>
         </tr>
         <tr class="mission-sum">
           <td class="category">미션 총합</td>
@@ -54,6 +75,9 @@
           </td>
           <td class="player-2">
             {{ match.p2MissionSum }} <span class="weak">/ 63</span>
+          </td>
+          <td v-if="match.playerCount === 3" class="player-3">
+            {{ match.p3MissionSum }} <span class="weak">/ 63</span>
           </td>
         </tr>
         <tr class="mission-bonus">
@@ -74,6 +98,15 @@
               }"
             >
               {{ match.p2MissionSuccess ? 35 : 0 }}
+            </div>
+          </td>
+          <td v-if="match.playerCount === 3" class="player-3 pointed">
+            <div
+              :class="{
+                'animate__animated animate__heartBeat': match.p3MissionSuccess,
+              }"
+            >
+              {{ match.p3MissionSuccess ? 35 : 0 }}
             </div>
           </td>
         </tr>
@@ -104,11 +137,24 @@
               {{ point('p2', key) }}
             </div>
           </td>
+          <td
+            v-if="match.playerCount === 3"
+            class="player-3"
+            :class="{ pointed: isFilled('p3', key) }"
+            @click="onClick('p3', key)"
+          >
+            <div :class="{ 'animate__animated animate__flip': hasYacht('p3', key) }">
+              {{ point('p3', key) }}
+            </div>
+          </td>
         </tr>
         <tr class="total-point">
           <td class="category">총점</td>
           <td class="player-1">{{ match.p1TotalSum }}</td>
           <td class="player-2">{{ match.p2TotalSum }}</td>
+          <td v-if="match.playerCount === 3" class="player-3">
+            {{ match.p3TotalSum }}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -288,14 +334,40 @@ function onClick(playerTurn, category) {
   }
 }
 
+// three-players 3-players
+.point-table.three-players {
+  .player-1,
+  .player-2,
+  .player-3 {
+    width: 10rem;
+    text-align: center;
+  }
+
+  thead th.player-2.score {
+    border-top-right-radius: 0;
+  }
+  thead th.player-3.score {
+    border-top-right-radius: 8px;
+  }
+
+  tbody tr.total-point td.player-2 {
+    border-bottom-right-radius: 0;
+  }
+  tbody tr.total-point td.player-3 {
+    border-bottom-right-radius: 8px;
+  }
+}
+
 .point-table[data-turn='p1'] thead th.player-1.name,
-.point-table[data-turn='p2'] thead th.player-2.name {
+.point-table[data-turn='p2'] thead th.player-2.name,
+.point-table[data-turn='p3'] thead th.player-3.name {
   font-weight: bold;
   background-color: #defcbb;
 }
 
 .point-table[data-turn='p1'] tr.numberable td.player-1,
-.point-table[data-turn='p2'] tr.numberable td.player-2 {
+.point-table[data-turn='p2'] tr.numberable td.player-2,
+.point-table[data-turn='p3'] tr.numberable td.player-3 {
   color: #878787;
   background-color: #defcbb;
   &:not(.pointed):hover {
@@ -314,5 +386,11 @@ function onClick(playerTurn, category) {
 .point-table tr.mission-bonus td.player-2.pointed {
   font-size: 2.4rem;
   color: #4363e8;
+}
+
+.point-table tr.numberable td.player-3.pointed,
+.point-table tr.mission-bonus td.player-3.pointed {
+  font-size: 2.4rem;
+  color: #23a914;
 }
 </style>

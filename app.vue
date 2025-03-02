@@ -64,9 +64,9 @@ function onGameEnd() {
 
 function alertGameEnd() {
   const winnerName = match.currentGameWinnerName;
-  const title = winnerName === '' ? '무승부' : `${winnerName} 승리`;
+  const title = winnerName === null ? '무승부' : `${winnerName} 승리`;
   const html =
-    winnerName === ''
+    winnerName === null
       ? `<img src="${TieGame}" width="200" height="200" />`
       : `<img src="${WinnerAndLoser}" width="256" height="200" />`;
 

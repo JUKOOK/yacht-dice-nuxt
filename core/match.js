@@ -4,22 +4,27 @@ import Dice from './dice';
 
 const DICE_NUM = 5;
 const WIN_SCORE_MAP = {
-  single: 1,
-  '3of2': 2,
-  '5of3': 3,
+  first1: 1,
+  first2: 2,
+  first3: 3,
 };
 export default class Match {
   constructor() {
-    this._matchType = ''; // 'single', '3of2', '5of3'
+    this._matchType = ''; // 'first1', 'first2', 'first3'
     this._scoreToWIn = 0;
+    this._playerCount = 0;
     this._player1 = null;
     this._player2 = null;
+    this._player3 = null;
     this._game = null;
     this._dices = [];
   }
 
   get scoreToWin() {
     return this._scoreToWIn;
+  }
+  get playerCount() {
+    return this._playerCount;
   }
 
   get player1Name() {
@@ -34,10 +39,17 @@ export default class Match {
   get player2Score() {
     return this._player2?.score ?? 0;
   }
+  get player3Name() {
+    return this._player3?.name ?? '플레이어 3';
+  }
+  get player3Score() {
+    return this._player3?.score ?? 0;
+  }
 
   get playerTurn() {
     return this._game?.playerTurn ?? 'p1';
   }
+
   get p1MissionSum() {
     return this._game?.p1MissionSum ?? 0;
   }
@@ -55,6 +67,15 @@ export default class Match {
   }
   get p2TotalSum() {
     return this._game?.p2TotalSum ?? 0;
+  }
+  get p3MissionSum() {
+    return this._game?.p3MissionSum ?? 0;
+  }
+  get p3MissionSuccess() {
+    return this._game?.p3MissionSuccess ?? false;
+  }
+  get p3TotalSum() {
+    return this._game?.p3TotalSum ?? 0;
   }
 
   get dices() {
@@ -74,7 +95,9 @@ export default class Match {
       ? this.player1Name
       : gameWinner === 'p2'
       ? this.player2Name
-      : '';
+      : gameWinner === 'p3'
+      ? this.player3Name
+      : null;
   }
   get isGameEnd() {
     const gameWinner = this._game?.gameWinner;
@@ -83,16 +106,19 @@ export default class Match {
   get matchWinnerName() {
     if (this._player1.isMatchWinner(this._scoreToWIn)) return this.player1Name;
     else if (this._player2.isMatchWinner(this._scoreToWIn)) return this.player2Name;
-    else return '';
+    else if (this._player3.isMatchWinner(this._scoreToWIn)) return this.player3Name;
+    else return null;
   }
   get isMatchEnd() {
     return !!this.matchWinnerName;
   }
 
-  startMatch({ matchType, p1Info, p2Info, gameInfo, dicesInfo } = {}) {
-    this.initializeMatch(matchType);
-    this.initializePlayers(p1Info, p2Info);
-    this.initializeGame(gameInfo);
+  startMatch({ matchType, p1Info, p2Info, p3Info, gameInfo, dicesInfo } = {}) {
+    const playerCount = !!p3Info?.name ? 3 : 2;
+
+    this.initializeMatch(matchType, playerCount);
+    this.initializePlayers(p1Info, p2Info, p3Info);
+    this.initializeGame(gameInfo, playerCount);
     this.initializeDices(dicesInfo);
   }
   startNextGame({ shouldSwap = false }) {
@@ -101,16 +127,19 @@ export default class Match {
     this.initializeDices();
   }
 
-  initializeMatch(matchType = 'single') {
+  initializeMatch(matchType = 'first1', playerCount) {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
+    this._playerCount = playerCount;
   }
-  initializePlayers(p1Info, p2Info) {
+  initializePlayers(p1Info, p2Info, p3Info) {
     this._player1 = new Player({ name: p1Info?.name, score: p1Info?.score });
     this._player2 = new Player({ name: p2Info?.name, score: p2Info?.score });
+    // player3가 없더라도 Player 객체를 생성.
+    this._player3 = new Player({ name: p3Info?.name, score: p3Info?.score });
   }
-  initializeGame(gameInfo) {
-    this._game = new Game(gameInfo);
+  initializeGame(gameInfo, playerCount) {
+    this._game = new Game(gameInfo, playerCount);
   }
   initializeDices(dicesInfo) {
     this._dices = [];
@@ -122,10 +151,20 @@ export default class Match {
   }
 
   swapPlayer() {
+    // p1과 p2만 있는 경우, p1과 p2를 swap
+    // p1, p2, p3가 있는 경우, p2가 p1이 되고, p3가 p2가 되고, p1이 p3가 됨
     const p1Info = { ...this._player1.getCurrentInfo() };
     const p2Info = { ...this._player2.getCurrentInfo() };
-    this._player1 = new Player(p2Info);
-    this._player2 = new Player(p1Info);
+
+    if (this._playerCount === 2) {
+      this._player1 = new Player(p2Info);
+      this._player2 = new Player(p1Info);
+    } else if (this._playerCount == 3) {
+      const p3Info = { ...this._player3.getCurrentInfo() };
+      this._player1 = new Player(p2Info);
+      this._player2 = new Player(p3Info);
+      this._player3 = new Player(p1Info);
+    }
   }
   getPlayerPoint(playerTurn, category) {
     return this._game?.getPoint(playerTurn, category) ?? null;
@@ -144,12 +183,15 @@ export default class Match {
     const gameWinner = this._game?.gameWinner;
     if (gameWinner === 'p1') this._player1.incrementScore();
     else if (gameWinner === 'p2') this._player2.incrementScore();
+    else if (gameWinner === 'p3') this._player3.incrementScore();
   }
   endMatch() {
     this._matchType = '';
     this._scoreToWIn = 0;
+    this._playerCount = 0;
     this._player1 = null;
     this._player2 = null;
+    this._player3 = null;
     this._game = null;
     this._dices = [];
     localStorage.removeItem('yacht-dice-snapshot');
@@ -162,6 +204,7 @@ export default class Match {
       gameInfo: this._game.getCurrentInfo(),
       p1Info: this._player1.getCurrentInfo(),
       p2Info: this._player2.getCurrentInfo(),
+      p3Info: this._player3.getCurrentInfo(),
       dicesInfo: this._dices.map((dice) => dice.getCurrentInfo()),
     };
     localStorage.setItem('yacht-dice-snapshot', JSON.stringify(currentMatchInfo));
