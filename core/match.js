@@ -114,11 +114,9 @@ export default class Match {
   }
 
   startMatch({ matchType, p1Info, p2Info, p3Info, gameInfo, dicesInfo } = {}) {
-    const playerCount = !!p3Info?.name ? 3 : 2;
-
-    this.initializeMatch(matchType, playerCount);
+    this.initializeMatch(matchType, !!p3Info?.name);
     this.initializePlayers(p1Info, p2Info, p3Info);
-    this.initializeGame(gameInfo, playerCount);
+    this.initializeGame(gameInfo);
     this.initializeDices(dicesInfo);
   }
   startNextGame({ shouldSwap = false }) {
@@ -127,10 +125,10 @@ export default class Match {
     this.initializeDices();
   }
 
-  initializeMatch(matchType = 'first1', playerCount) {
+  initializeMatch(matchType = 'first1', hasPlayer3 = false) {
     this._matchType = matchType;
     this._scoreToWIn = WIN_SCORE_MAP[matchType];
-    this._playerCount = playerCount;
+    this._playerCount = hasPlayer3 ? 3 : 2;
   }
   initializePlayers(p1Info, p2Info, p3Info) {
     this._player1 = new Player({ name: p1Info?.name, score: p1Info?.score });
@@ -138,8 +136,8 @@ export default class Match {
     // player3가 없더라도 Player 객체를 생성.
     this._player3 = new Player({ name: p3Info?.name, score: p3Info?.score });
   }
-  initializeGame(gameInfo, playerCount) {
-    this._game = new Game(gameInfo, playerCount);
+  initializeGame(gameInfo) {
+    this._game = new Game(gameInfo, this._playerCount);
   }
   initializeDices(dicesInfo) {
     this._dices = [];
