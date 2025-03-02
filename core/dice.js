@@ -25,11 +25,7 @@ export default class Dice {
   setFixed(b) {
     this._status = b ? statusEnum.FIXED : statusEnum.NONE;
   }
-  setEye(eye) {
-    if (!this.isActive) return;
 
-    this._eye = eye;
-  }
   rollUpEye() {
     if (!this.isActive) return;
 
@@ -80,9 +76,34 @@ export default class Dice {
         break;
     }
   }
-  reset() {
-    this._eye = eyeEnum.BLANK;
-    this._status = statusEnum.NONE;
+  reset(randomize = false) {
+    if (randomize) {
+      const eye = Math.floor(Math.random() * 6) + 1;
+      switch (eye) {
+        case 1:
+          this._eye = eyeEnum.ONE;
+          break;
+        case 2:
+          this._eye = eyeEnum.TWO;
+          break;
+        case 3:
+          this._eye = eyeEnum.THREE;
+          break;
+        case 4:
+          this._eye = eyeEnum.FOUR;
+          break;
+        case 5:
+          this._eye = eyeEnum.FIVE;
+          break;
+        case 6:
+          this._eye = eyeEnum.SIX;
+          break;
+      }
+      this._status = statusEnum.NONE;
+    } else {
+      this._eye = eyeEnum.BLANK;
+      this._status = statusEnum.NONE;
+    }
   }
 
   // 백업용 정보 추출

@@ -176,7 +176,9 @@ export default class Match {
     this._game.toggleTurn();
   }
   resetDices() {
-    this._dices.forEach((dice) => dice.reset());
+    // 개발환경에서는 randomize reset 한다.
+    const randomize = process.env.NODE_ENV === 'development';
+    this._dices.forEach((dice) => dice.reset(randomize));
   }
 
   endGame() {
